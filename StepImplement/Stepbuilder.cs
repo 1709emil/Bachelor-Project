@@ -1,4 +1,4 @@
-﻿using VisualWorkflowBuilder.Abstractions.StepAbstraction;
+﻿using VisualWorkflowBuilder.Abstractions;
 using VisualWorkflowBuilder.Core;
 
 namespace VisualWorkflowBuilder.StepImplement;

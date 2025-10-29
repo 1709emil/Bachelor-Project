@@ -5,10 +5,6 @@ public sealed class Step
      private string actionName;
      private int id;
      
-
-     
-     
-     
      public string ActionName
      {
           get { return actionName; }

@@ -1,8 +1,9 @@
 ﻿using System.Windows;
-using VisualWorkflowBuilder.Abstractions.StepAbstraction;
+using VisualWorkflowBuilder.Abstractions;
 using VisualWorkflowBuilder.StepImplement;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using VisualWorkflowBuilder.Core;
 
 namespace VisualWorkflowBuilder;
 
@@ -31,6 +32,8 @@ public partial class App : Application
         window.Show();
 
         base.OnStartup(e);
+        Step test = new Stepbuilder().CreateStep("bob", 1);
+        Console.WriteLine(test.Id+ " : "  + test.ActionName);
     }
 
     protected override void OnExit(ExitEventArgs e)

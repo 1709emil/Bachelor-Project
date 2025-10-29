@@ -1,6 +1,6 @@
 ﻿using VisualWorkflowBuilder.Core;
 
-namespace VisualWorkflowBuilder.Abstractions.StepAbstraction;
+namespace VisualWorkflowBuilder.Abstractions;
 
 public interface IStep
 {  
