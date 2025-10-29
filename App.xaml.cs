@@ -1,11 +1,9 @@
 ﻿using System.Windows;
 using VisualWorkflowBuilder.Abstractions.StepAbstraction;
 using VisualWorkflowBuilder.StepImplement;
-
-using System;
-using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
 namespace VisualWorkflowBuilder;
 
 public partial class App : Application
