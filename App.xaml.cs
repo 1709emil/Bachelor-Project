@@ -19,7 +19,7 @@ public partial class App : Application
             {
                 
                 services.AddSingleton<IStep, Stepbuilder>();
-                
+                services.AddTransient<test>();
 
               
                 
@@ -32,8 +32,8 @@ public partial class App : Application
         window.Show();
 
         base.OnStartup(e);
-        Step test = new Stepbuilder().CreateStep("bob", 1);
-        Console.WriteLine(test.Id+ " : "  + test.ActionName);
+        test bob =_host.Services.GetRequiredService<test>();
+        bob.useIStep();
     }
 
     protected override void OnExit(ExitEventArgs e)
