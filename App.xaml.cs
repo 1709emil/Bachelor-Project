@@ -1,13 +1,13 @@
 ﻿using System.Windows;
-using VisualWorkflowBuilder.Abstractions;
-using VisualWorkflowBuilder.StepImplement;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using VisualWorkflowBuilder.Abstractions;
 using VisualWorkflowBuilder.Core;
+using VisualWorkflowBuilder.YamlTranslator;
 
 namespace VisualWorkflowBuilder;
 
-public partial class App : Application
+public partial class App 
 {
     
     private IHost _host = null!;
@@ -17,12 +17,8 @@ public partial class App : Application
         _host = Host.CreateDefaultBuilder()
             .ConfigureServices(services =>
             {
-                
-                services.AddSingleton<IStep, Stepbuilder>();
-                services.AddTransient<test>();
-
-              
-                
+                services.AddSingleton<IObjectToYamlTranslator, ObjectToYamlImplementation>();
+                services.AddTransient<ObjectToYamlService>();
                 services.AddTransient<MainWindow>();
             })
             .Build();
@@ -32,8 +28,9 @@ public partial class App : Application
         window.Show();
 
         base.OnStartup(e);
-        test bob =_host.Services.GetRequiredService<test>();
-        bob.useIStep();
+
+        ObjectToYamlService test =_host.Services.GetRequiredService<ObjectToYamlService>();
+        test.test();
     }
 
     protected override void OnExit(ExitEventArgs e)
