@@ -1,0 +1,114 @@
+﻿<Window x:Class="VisualWorkflowBuilder.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Visual Workflow Builder" Height="Auto" Width="auto">
+      <!-- Dark Theme Resources -->
+    <Window.Resources>
+        <!-- Color Palette -->
+        <SolidColorBrush x:Key="Brush.Window"      Color="#000000"/> <!-- true black background -->
+        <SolidColorBrush x:Key="Brush.Surface"     Color="#1A1A1A"/>
+        <SolidColorBrush x:Key="Brush.SurfaceAlt"  Color="#202020"/>
+        <SolidColorBrush x:Key="Brush.Border"      Color="#333333"/>
+        <SolidColorBrush x:Key="Brush.Accent"      Color="#4F8BFF"/>
+        <SolidColorBrush x:Key="Brush.TextPrimary" Color="#EAEAEA"/>
+        <SolidColorBrush x:Key="Brush.TextMuted"   Color="#B7B7B7"/>
+
+        <!-- Default Styles -->
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource Brush.TextPrimary}"/>
+        </Style>
+
+        <Style TargetType="Border">
+            <Setter Property="CornerRadius" Value="8"/>
+        </Style>
+
+        <Style x:Key="Card" TargetType="Border" BasedOn="{StaticResource {x:Type Border}}">
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="Background" Value="{DynamicResource Brush.Surface}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+    </Window.Resources>
+
+    <!-- Main Layout -->
+    <Grid Background="{DynamicResource Brush.SurfaceAlt}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="56"/>   <!-- Nav bar -->
+            <RowDefinition Height="*"/>    <!-- Main area -->
+        </Grid.RowDefinitions>
+
+        <!-- Top Navigation Bar -->
+        <Border Grid.Row="0"
+                Background="{DynamicResource Brush.SurfaceAlt}"
+                BorderBrush="{DynamicResource Brush.Border}"
+                BorderThickness="0,0,0,1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0">
+                    <TextBlock Text="Nav Bar" FontSize="16" FontWeight="Bold"/>
+                    <Separator Width="16" Opacity="0"/>
+                    <TextBlock Text="•" Foreground="{DynamicResource Brush.TextMuted}" Margin="0,0,6,0"/>
+                    <TextBlock Text="Placeholder" Foreground="{DynamicResource Brush.TextMuted}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,12,0">
+                    <Button Content="Action" Padding="10,6" Margin="0,0,8,0"
+                            Background="{DynamicResource Brush.Accent}" Foreground="White"
+                            BorderBrush="{x:Null}" />
+                    <Button Content="…" Padding="10,6"
+                            Background="{DynamicResource Brush.Surface}" 
+                            Foreground="{DynamicResource Brush.TextPrimary}"
+                            BorderBrush="{DynamicResource Brush.Border}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Main Area (Sidebar + Workspace) -->
+        <Grid Grid.Row="1" Background="{DynamicResource Brush.Window}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="260" MinWidth="160"/> <!-- Sidebar -->
+                <ColumnDefinition Width="6"/>  <!-- Splitter -->
+                <ColumnDefinition Width="*"/>  <!-- Workspace -->
+            </Grid.ColumnDefinitions>
+
+            <!-- Sidebar -->
+            <Border Grid.Column="0" Style="{StaticResource Card}">
+                <DockPanel LastChildFill="True" Background="{DynamicResource Brush.Surface}">
+                    <TextBlock Text="Elements" FontWeight="SemiBold" FontSize="14" Margin="2,0,0,8"/>
+                    <Separator DockPanel.Dock="Top" Height="1" Margin="0,8,0,8"
+                               Background="{DynamicResource Brush.Border}"/>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Background="Transparent">
+                        <StackPanel>
+                            <TextBlock Text="• Item A" Foreground="{DynamicResource Brush.TextMuted}" Margin="0,2"/>
+                            <TextBlock Text="• Item B" Foreground="{DynamicResource Brush.TextMuted}" Margin="0,2"/>
+                            <TextBlock Text="• Item C" Foreground="{DynamicResource Brush.TextMuted}" Margin="0,2"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                </DockPanel>
+            </Border>
+
+            <!-- Splitter -->
+            <GridSplitter Grid.Column="1"
+                          Width="6"
+                          HorizontalAlignment="Stretch"
+                          Background="{DynamicResource Brush.Border}"
+                          ResizeBehavior="PreviousAndNext"
+                          ShowsPreview="True"/>
+
+            <!-- Workspace -->
+            <Border Grid.Column="2" Style="{StaticResource Card}">
+                <Grid Background="{DynamicResource Brush.SurfaceAlt}">
+                    <TextBlock Text="Workspace"
+                               FontSize="22"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>
