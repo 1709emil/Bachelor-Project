@@ -33,7 +33,7 @@ public class ObjectToYamlService
                     Name = "Build & Test",
                     RunsOn = "ubuntu-latest",
                     Env = new() { ["NODE_ENV"] = "test" },
-                    Steps = {
+                    Steps = new () {
                         new Step { Name = "Checkout", Uses = "actions/checkout@v4" },
                         new Step {
                             Name = "Setup Node",
@@ -74,7 +74,7 @@ public class ObjectToYamlService
                 ["build"] = new Job {
                     Name = "Say Hello",
                     RunsOn = "ubuntu-latest",
-                    Steps = {
+                    Steps = new (){
                         new Step {
                             Name = "Checkout (optional for empty repo)",
                             Uses = "actions/checkout@v4"

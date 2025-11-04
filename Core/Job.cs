@@ -17,9 +17,7 @@ public sealed class Job
     public Dictionary<string, string>? Env  {get; set;}
     
     [YamlMember(Order = 5)]
-    public List<Step>? Steps  {get; set;} = new();
-
-    
+    public List<Step>? Steps  {get; set;} 
     
   
 }
