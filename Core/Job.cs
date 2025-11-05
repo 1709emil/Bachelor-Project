@@ -8,7 +8,7 @@ public sealed class Job
     public string Name  {get; set;}
     
     [YamlMember(Alias = "runs-on",  ApplyNamingConventions = false,Order = 2)]
-    public string RunsOn  {get; set;}
+    public string? RunsOn  {get; set;}
     
     [YamlMember(Order = 3)]
     public string? Needs  {get; set;}

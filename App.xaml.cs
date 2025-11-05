@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using VisualWorkflowBuilder.Abstractions;
 using VisualWorkflowBuilder.Core;
+using VisualWorkflowBuilder.UiImplementation.ViewModels;
+using VisualWorkflowBuilder.WorkflowManager;
 using VisualWorkflowBuilder.YamlTranslator;
 
 namespace VisualWorkflowBuilder;
@@ -19,6 +21,10 @@ public partial class App
             {
                 services.AddSingleton<IObjectToYamlTranslator, ObjectToYamlImplementation>();
                 services.AddTransient<ObjectToYamlService>();
+                services.AddSingleton<IWorkflowManager, WorkflowManagerImplementation>();
+                services.AddTransient<MainViewModel>();
+               
+                
                 services.AddTransient<MainWindow>();
             })
             .Build();

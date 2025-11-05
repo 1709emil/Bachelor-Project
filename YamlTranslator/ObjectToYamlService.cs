@@ -5,16 +5,16 @@ namespace VisualWorkflowBuilder.YamlTranslator;
 
 public class ObjectToYamlService
 {
-    private IObjectToYamlTranslator _translator;
+    private IObjectToYamlTranslator translator;
     
-    public ObjectToYamlService(IObjectToYamlTranslator translator)
+    public ObjectToYamlService(IObjectToYamlTranslator toYamlTranslator)
     {
-        _translator = translator;
+        translator = toYamlTranslator;
     }
 
     public void test()
     {
-        _translator.TranslateObjectToYaml(TestingWorkflow2());
+        translator.TranslateObjectToYaml(TestingWorkflow2());
     }
     
     private Workflow TestingWorkflow()

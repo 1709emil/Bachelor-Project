@@ -4,10 +4,10 @@ namespace VisualWorkflowBuilder.Core;
 
 public sealed class Triggers
 {
-    public BranchTrigger Push {get; set;}
+    public BranchTrigger? Push {get; set;}
     
     [YamlMember(Alias = "pull_request", ApplyNamingConventions = false)]
-    public BranchTrigger PullRequest  {get; set;}
+    public BranchTrigger? PullRequest  {get; set;}
 
     
     

@@ -5,13 +5,14 @@
       <!-- Dark Theme Resources -->
     <Window.Resources>
         <!-- Color Palette -->
-        <SolidColorBrush x:Key="Brush.Window"      Color="#000000"/> <!-- true black background -->
+        <SolidColorBrush x:Key="Brush.Window"      Color="#000000"/>
         <SolidColorBrush x:Key="Brush.Surface"     Color="#1A1A1A"/>
         <SolidColorBrush x:Key="Brush.SurfaceAlt"  Color="#202020"/>
         <SolidColorBrush x:Key="Brush.Border"      Color="#333333"/>
         <SolidColorBrush x:Key="Brush.Accent"      Color="#4F8BFF"/>
         <SolidColorBrush x:Key="Brush.TextPrimary" Color="#EAEAEA"/>
         <SolidColorBrush x:Key="Brush.TextMuted"   Color="#B7B7B7"/>
+        <SolidColorBrush x:Key="Brush.GreenBack" Color="LawnGreen" />
 
         <!-- Default Styles -->
         <Style TargetType="TextBlock">
@@ -83,9 +84,28 @@
                                Background="{DynamicResource Brush.Border}"/>
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Background="Transparent">
                         <StackPanel>
-                            <TextBlock Text="• Item A" Foreground="{DynamicResource Brush.TextMuted}" Margin="0,2"/>
-                            <TextBlock Text="• Item B" Foreground="{DynamicResource Brush.TextMuted}" Margin="0,2"/>
-                            <TextBlock Text="• Item C" Foreground="{DynamicResource Brush.TextMuted}" Margin="0,2"/>
+                            <Border BorderBrush="{DynamicResource Brush.Border}" 
+                                    BorderThickness="1"
+                                    CornerRadius="4"
+                                    Padding="8"
+                                    Margin="8"
+                                    Background="{DynamicResource Brush.GreenBack}">
+                                <StackPanel>
+                                    <TextBlock Text="Custom Job"
+                                               FontWeight="Bold"
+                                               FontSize="14"
+                                               Margin="0,0,0,6"
+                                               Foreground="{DynamicResource Brush.SurfaceAlt}"
+                                               />
+
+                                    <Button Content="Add"
+                                            HorizontalAlignment="Right"
+                                            Padding="10,4"
+                                            Background="{DynamicResource Brush.Accent}"
+                                            Foreground="White"
+                                            BorderBrush="{x:Null}"/>
+                                </StackPanel>
+                            </Border>
                         </StackPanel>
                     </ScrollViewer>
                 </DockPanel>
@@ -101,13 +121,39 @@
 
             <!-- Workspace -->
             <Border Grid.Column="2" Style="{StaticResource Card}">
-                <Grid Background="{DynamicResource Brush.SurfaceAlt}">
-                    <TextBlock Text="Workspace"
-                               FontSize="22"
-                               FontWeight="Bold"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"/>
-                </Grid>
+                <ScrollViewer Background="{DynamicResource Brush.SurfaceAlt}">
+                    <ItemsControl ItemsSource="{Binding Workflow}">
+                        <!-- Canvas as layout surface -->
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <!-- Position each node -->
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="ContentPresenter">
+                                <Setter Property="Canvas.Left" Value="200" />
+                                <Setter Property="Canvas.Top" Value="200" />
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+
+                        <!-- Node appearance -->
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border CornerRadius="8"
+                                        Padding="12"
+                                        Background="{DynamicResource Brush.Surface}"
+                                        BorderBrush="{DynamicResource Brush.Border}"
+                                        BorderThickness="1"
+                                        Margin="4">
+                                    <TextBlock Text="{Binding Title}"
+                                               Foreground="{DynamicResource Brush.TextPrimary}"/>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
             </Border>
         </Grid>
     </Grid>
