@@ -1,7 +1,7 @@
 using System.IO;
-using VisualWorkflowBuilder.Core;
+using VisualWorkflowBuilder.Core.Entities;
 
-namespace VisualWorkflowBuilder.Abstractions;
+namespace VisualWorkflowBuilder.Application.Ports;
 
 public interface IYamlToObjectTranslator
 {

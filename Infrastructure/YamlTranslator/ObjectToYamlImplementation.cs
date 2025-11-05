@@ -1,10 +1,10 @@
 using System.IO;
-using VisualWorkflowBuilder.Abstractions;
-using VisualWorkflowBuilder.Core;
+using VisualWorkflowBuilder.Application.Ports;
+using VisualWorkflowBuilder.Core.Entities;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace VisualWorkflowBuilder.YamlTranslator;
+namespace VisualWorkflowBuilder.Infrastructure.YamlTranslator;
 
 public class ObjectToYamlImplementation : IObjectToYamlTranslator
 {

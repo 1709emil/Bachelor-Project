@@ -1,4 +1,4 @@
-namespace VisualWorkflowBuilder.Core;
+namespace VisualWorkflowBuilder.Core.Entities;
 
 public class BranchTrigger
 {

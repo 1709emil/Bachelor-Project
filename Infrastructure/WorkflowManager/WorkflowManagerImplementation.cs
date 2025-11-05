@@ -1,8 +1,7 @@
-using System.Collections.ObjectModel;
-using VisualWorkflowBuilder.Abstractions;
-using VisualWorkflowBuilder.Core;
+using VisualWorkflowBuilder.Application.Ports;
+using VisualWorkflowBuilder.Core.Entities;
 
-namespace VisualWorkflowBuilder.WorkflowManager;
+namespace VisualWorkflowBuilder.Infrastructure.WorkflowManager;
 
 public class WorkflowManagerImplementation : IWorkflowManager
 {

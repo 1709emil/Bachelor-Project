@@ -1,7 +1,7 @@
 using System.Collections.ObjectModel;
-using VisualWorkflowBuilder.Abstractions;
-using VisualWorkflowBuilder.Core;
 using System.Windows.Input;
+using VisualWorkflowBuilder.Application.Ports;
+using VisualWorkflowBuilder.Core.Entities;
 using VisualWorkflowBuilder.UiImplementation.Commands;
 
 namespace VisualWorkflowBuilder.UiImplementation.ViewModels;
@@ -10,7 +10,7 @@ public class MainViewModel
 {
     private IWorkflowManager manager;
 
-    public ObservableCollection<Workflow> Workflow { get; set; } = new();
+    public ObservableCollection<Workflow> Workflow { get; } = new();
     
     public ICommand AddJobToWorkspaceCommand {get; set;}
     

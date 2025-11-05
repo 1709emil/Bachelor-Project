@@ -27,4 +27,12 @@
       <PackageReference Include="YamlDotNet" Version="16.3.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ApplicationDefinition Include="Presentation\App.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+      </ApplicationDefinition>
+    </ItemGroup>
+
 </Project>

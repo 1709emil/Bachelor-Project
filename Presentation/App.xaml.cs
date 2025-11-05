@@ -1,11 +1,10 @@
 ﻿using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using VisualWorkflowBuilder.Abstractions;
-using VisualWorkflowBuilder.Core;
-using VisualWorkflowBuilder.UiImplementation.ViewModels;
-using VisualWorkflowBuilder.WorkflowManager;
-using VisualWorkflowBuilder.YamlTranslator;
+using VisualWorkflowBuilder.Application;
+using VisualWorkflowBuilder.Application.UseCases;
+using VisualWorkflowBuilder.Infrastructure;
+
 
 namespace VisualWorkflowBuilder;
 
@@ -19,13 +18,9 @@ public partial class App
         _host = Host.CreateDefaultBuilder()
             .ConfigureServices(services =>
             {
-                services.AddSingleton<IObjectToYamlTranslator, ObjectToYamlImplementation>();
-                services.AddTransient<ObjectToYamlService>();
-                services.AddSingleton<IWorkflowManager, WorkflowManagerImplementation>();
-                services.AddTransient<MainViewModel>();
-               
-                
-                services.AddTransient<MainWindow>();
+                services.AddApplication();
+                services.AddInfrastructure();
+                services.AddPresentation();
             })
             .Build();
 

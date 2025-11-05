@@ -1,6 +1,6 @@
 using YamlDotNet.Serialization;
 
-namespace VisualWorkflowBuilder.Core;
+namespace VisualWorkflowBuilder.Core.Entities;
 
 public sealed class Job
 {

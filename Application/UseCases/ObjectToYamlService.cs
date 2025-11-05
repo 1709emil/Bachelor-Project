@@ -1,7 +1,7 @@
-using VisualWorkflowBuilder.Abstractions;
-using VisualWorkflowBuilder.Core;
+using VisualWorkflowBuilder.Application.Ports;
+using VisualWorkflowBuilder.Core.Entities;
 
-namespace VisualWorkflowBuilder.YamlTranslator;
+namespace VisualWorkflowBuilder.Application.UseCases;
 
 public class ObjectToYamlService
 {

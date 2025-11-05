@@ -1,6 +1,6 @@
-using VisualWorkflowBuilder.Core;
+using VisualWorkflowBuilder.Core.Entities;
 
-namespace VisualWorkflowBuilder.Abstractions;
+namespace VisualWorkflowBuilder.Application.Ports;
 
 public interface IJobManager
 {
