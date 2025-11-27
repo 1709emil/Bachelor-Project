@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using VisualWorkflowBuilder.Core.Entities;
+using VisualWorkflowBuilder.Presentation.Views;
 using VisualWorkflowBuilder.UiImplementation.Commands;
 
 namespace VisualWorkflowBuilder.Presentation.ViewModels;
@@ -21,6 +22,7 @@ internal class EditJobViewModel
     public ICommand RemoveEnvEntryCommand { get; }
     public ICommand AddStepCommand { get; }
     public ICommand RemoveStepCommand { get; }
+    public ICommand ShowEditStepWindowCommand { get; }
 
     public EditJobViewModel(Job job)
     {
@@ -38,19 +40,20 @@ internal class EditJobViewModel
         RemoveEnvEntryCommand = new RelayCommand(RemoveEnvEntry, _ => true);
         AddStepCommand = new RelayCommand(AddStep, _ => true);
         RemoveStepCommand = new RelayCommand(RemoveStep, _ => true);
+        ShowEditStepWindowCommand = new RelayCommand(ShowEditStepWindow, _ => true);
     }
 
     private void Save(object parameter)
     {
-        // Apply edited env back to Job
+        
         Job.Env = Env
             .Where(e => !string.IsNullOrWhiteSpace(e.Key))
             .ToDictionary(e => e.Key!, e => e.Value ?? string.Empty);
 
-        // Apply edited steps back to Job
+        
         Job.Steps = Steps.ToList();
 
-        // Close the window if passed as command parameter
+        
         if (parameter is Window w)
         {
             w.DialogResult = true;
@@ -83,6 +86,24 @@ internal class EditJobViewModel
     {
         if (parameter is Step step && Steps.Contains(step))
             Steps.Remove(step);
+    }
+
+    private void ShowEditStepWindow(object parameter)
+    {
+        if (parameter is not Step step)
+        {
+            return;
+        }
+
+        var editStepWindow = new EditStepWindow
+        {
+            Owner = System.Windows.Application.Current.MainWindow,
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+            DataContext = new EditStepViewModel(step)
+        };
+
+
+        editStepWindow.ShowDialog();
     }
 
     internal class EnvEntry
