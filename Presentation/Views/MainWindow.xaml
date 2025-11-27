@@ -96,67 +96,76 @@
 
             <!-- Workspace -->
             <Border Grid.Column="2" Style="{StaticResource Card}">
-                <ScrollViewer Background="{DynamicResource Brush.SurfaceAlt}">
-                    <ItemsControl ItemsSource="{Binding Path =Jobs}">
-                        <!-- Canvas as layout surface -->
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <Canvas />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
+                <!-- Put connector Canvas and ItemsControl inside the same ScrollViewer content so lines and nodes share coordinates and scroll together -->
+                <ScrollViewer x:Name="WorkspaceScrollViewer" Background="{DynamicResource Brush.SurfaceAlt}"
+                              HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <Grid x:Name="WorkspaceGrid">
+                        <!-- Connector canvas sits behind nodes -->
+                        <Canvas x:Name="ConnectorCanvas" IsHitTestVisible="False" Background="Transparent"/>
+                        <!-- Nodes -->
+                        <ItemsControl x:Name="JobsItemsControl" ItemsSource="{Binding Nodes}">
+                            <!-- Canvas as layout surface -->
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Canvas />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
 
-                        <!-- Position each node -->
-                        <ItemsControl.ItemContainerStyle>
-                            <Style TargetType="ContentPresenter">
-                                <Setter Property="Canvas.Left" Value="200" />
-                                <Setter Property="Canvas.Top" Value="200" />
-                            </Style>
-                        </ItemsControl.ItemContainerStyle>
+                            <!-- Position each node by binding to Node.CanvasLeft/CanvasTop -->
+                            <ItemsControl.ItemContainerStyle>
+                                <Style TargetType="ContentPresenter">
+                                    <Setter Property="Canvas.Left" Value="{Binding CanvasLeft}" />
+                                    <Setter Property="Canvas.Top" Value="{Binding CanvasTop}" />
+                                </Style>
+                            </ItemsControl.ItemContainerStyle>
 
-                        <!-- Node appearance -->
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="{x:Type local:Job}">
-                                <Border CornerRadius="8"
-                                        Padding="12"
-                                        Background="{DynamicResource Brush.Surface}"
-                                        BorderBrush="{DynamicResource Brush.Border}"
-                                        BorderThickness="1"
-                                        Margin="4"
-                                        MinWidth="160" MinHeight="100">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition/>          <!-- Centered content -->
-                                            <RowDefinition Height="Auto"/> <!-- Bottom button -->
-                                        </Grid.RowDefinitions>
+                            <!-- Node appearance (DataContext is JobNodeViewModel) -->
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="8"
+                                            Padding="12"
+                                            Background="{DynamicResource Brush.Surface}"
+                                            BorderBrush="{DynamicResource Brush.Border}"
+                                            BorderThickness="1"
+                                            Margin="4"
+                                            MinWidth="160" MinHeight="100"
+                                            MouseLeftButtonDown="Node_MouseLeftButtonDown"
+                                            MouseMove="Node_MouseMove"
+                                            MouseLeftButtonUp="Node_MouseLeftButtonUp">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>          <!-- Centered content -->
+                                                <RowDefinition Height="Auto"/> <!-- Bottom button -->
+                                            </Grid.RowDefinitions>
 
-                                        <!-- Centered Job name -->
-                                        <TextBlock Text="{Binding Name}"
-                                                   Foreground="{DynamicResource Brush.TextPrimary}"
-                                                   FontSize="14"
-                                                   FontWeight="SemiBold"
-                                                   VerticalAlignment="Center"
-                                                   HorizontalAlignment="Center"/>
+                                            <!-- Centered Job name -->
+                                            <TextBlock Text="{Binding Job.Name}"
+                                                       Foreground="{DynamicResource Brush.TextPrimary}"
+                                                       FontSize="14"
+                                                       FontWeight="SemiBold"
+                                                       VerticalAlignment="Center"
+                                                       HorizontalAlignment="Center"/>
 
-                                        <!-- Bottom-right button -->
-                                        <Button Grid.Row="1"
-                                                Content="Edit"
-                                                Padding="14,6"
-                                                Margin="0,10,0,0"
-                                                HorizontalAlignment="Right"
-                                                VerticalAlignment="Bottom"
-                                                Background="{DynamicResource Brush.Accent}"
-                                                Foreground="White"
-                                                BorderBrush="{x:Null}"
-                                                FontWeight="SemiBold"
-                                                Command="{Binding DataContext.ShowEditWindowCommand,
-                                                RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                                CommandParameter="{Binding}"/>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
+                                            <!-- Bottom-right button -->
+                                            <Button Grid.Row="1"
+                                                    Content="Edit"
+                                                    Padding="14,6"
+                                                    Margin="0,10,0,0"
+                                                    HorizontalAlignment="Right"
+                                                    VerticalAlignment="Bottom"
+                                                    Background="{DynamicResource Brush.Accent}"
+                                                    Foreground="White"
+                                                    BorderBrush="{x:Null}"
+                                                    FontWeight="SemiBold"
+                                                    Command="{Binding DataContext.ShowEditWindowCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                    CommandParameter="{Binding}"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
 
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
                 </ScrollViewer>
             </Border>
         </Grid>
