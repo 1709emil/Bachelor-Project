@@ -150,7 +150,7 @@
                                                 FontWeight="SemiBold"
                                                 Command="{Binding DataContext.ShowEditWindowCommand,
                                                 RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                                CommandParameter="{x:Reference Name=mainWindow}"/>
+                                                CommandParameter="{Binding}"/>
                                     </Grid>
                                 </Border>
                             </DataTemplate>

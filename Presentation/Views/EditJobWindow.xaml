@@ -1,9 +1,165 @@
 <Window x:Class="VisualWorkflowBuilder.EditJobWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Edit Job" Width="520" Height="480"
-        Background="{DynamicResource Brush.SurfaceAlt}">
-    <Grid>
-        <!-- Edit UI here -->
-    </Grid>
+        Title="Edit Job"
+        Height="450"
+        Width="520"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource Brush.SurfaceAlt}"
+        Foreground="{DynamicResource Brush.TextPrimary}">
+    <Border Margin="12"
+            Background="{DynamicResource Brush.Surface}"
+            BorderBrush="{DynamicResource Brush.Border}"
+            BorderThickness="1"
+            CornerRadius="8">
+        <Grid Margin="12">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Vertical" Grid.Row="0" Margin="0,0,0,8">
+                <TextBlock Text="Job" FontSize="16" FontWeight="Bold" Margin="0,0,0,8"
+                           Foreground="{DynamicResource Brush.TextPrimary}"/>
+                <UniformGrid Columns="2" Margin="0,0,0,8">
+                    <TextBlock Text="Name:" VerticalAlignment="Center" Margin="0,0,8,0"
+                               Foreground="{DynamicResource Brush.TextMuted}"/>
+                    <TextBox Text="{Binding Job.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Background="{DynamicResource Brush.Window}"
+                             Foreground="{DynamicResource Brush.TextPrimary}"
+                             BorderBrush="{DynamicResource Brush.Border}" />
+
+                    <TextBlock Text="Runs On:" VerticalAlignment="Center" Margin="0,6,8,0"
+                               Foreground="{DynamicResource Brush.TextMuted}"/>
+                    <TextBox Text="{Binding Job.RunsOn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Background="{DynamicResource Brush.Window}"
+                             Foreground="{DynamicResource Brush.TextPrimary}"
+                             BorderBrush="{DynamicResource Brush.Border}" />
+
+                    <TextBlock Text="Needs:" VerticalAlignment="Center" Margin="0,6,8,0"
+                               Foreground="{DynamicResource Brush.TextMuted}"/>
+                    <TextBox Text="{Binding Job.Needs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Background="{DynamicResource Brush.Window}"
+                             Foreground="{DynamicResource Brush.TextPrimary}"
+                             BorderBrush="{DynamicResource Brush.Border}" />
+                </UniformGrid>
+            </StackPanel>
+
+            <!-- Middle: Env and Steps -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="8" />
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Env -->
+                <GroupBox Header="Environment Variables" Grid.Column="0"
+                          Background="{DynamicResource Brush.Surface}"
+                          BorderBrush="{DynamicResource Brush.Border}"
+                          Foreground="{DynamicResource Brush.TextPrimary}">
+                    <DockPanel>
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,4,0,8">
+                            <Button Content="Add" Padding="6,3" Margin="0,0,8,0" Command="{Binding AddEnvEntryCommand}"
+                                    Background="{DynamicResource Brush.Accent}"
+                                    Foreground="White"
+                                    BorderBrush="{x:Null}" />
+                        </StackPanel>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding Env}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <DockPanel Margin="0,4,0,4">
+                                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                                                <TextBox Width="140" Margin="0,0,8,0"
+                                                         Text="{Binding Key, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                         Background="{DynamicResource Brush.Window}"
+                                                         Foreground="{DynamicResource Brush.TextPrimary}"
+                                                         BorderBrush="{DynamicResource Brush.Border}" />
+                                                <TextBox Width="180" Margin="0,0,8,0"
+                                                         Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                         Background="{DynamicResource Brush.Window}"
+                                                         Foreground="{DynamicResource Brush.TextPrimary}"
+                                                         BorderBrush="{DynamicResource Brush.Border}" />
+                                            </StackPanel>
+                                            <Button Content="Remove"
+                                                    Command="{Binding DataContext.RemoveEnvEntryCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                    CommandParameter="{Binding}" HorizontalAlignment="Right"
+                                                    Background="{DynamicResource Brush.Surface}"
+                                                    BorderBrush="{DynamicResource Brush.Border}"
+                                                    Foreground="{DynamicResource Brush.TextPrimary}" />
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </DockPanel>
+                </GroupBox>
+
+                <!-- Steps -->
+                <GroupBox Header="Steps" Grid.Column="2"
+                          Background="{DynamicResource Brush.Surface}"
+                          BorderBrush="{DynamicResource Brush.Border}"
+                          Foreground="{DynamicResource Brush.TextPrimary}">
+                    <DockPanel>
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,4,0,8">
+                            <Button Content="Add Step" Padding="6,3" Margin="0,0,8,0" Command="{Binding AddStepCommand}"
+                                    Background="{DynamicResource Brush.Accent}"
+                                    Foreground="White"
+                                    BorderBrush="{x:Null}" />
+                        </StackPanel>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding Steps}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderThickness="1" BorderBrush="{DynamicResource Brush.Border}" Padding="6" Margin="0,0,0,8"
+                                                Background="{DynamicResource Brush.Surface}">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <StackPanel>
+                                                    <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Margin="0,0,0,6"
+                                                             Background="{DynamicResource Brush.Window}"
+                                                             Foreground="{DynamicResource Brush.TextPrimary}"
+                                                             BorderBrush="{DynamicResource Brush.Border}" />
+                                                    <TextBox Text="{Binding Run, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                             Background="{DynamicResource Brush.Window}"
+                                                             Foreground="{DynamicResource Brush.TextPrimary}"
+                                                             BorderBrush="{DynamicResource Brush.Border}" />
+                                                </StackPanel>
+                                                <Button Grid.Column="1" Content="Remove" Command="{Binding DataContext.RemoveStepCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        CommandParameter="{Binding}" VerticalAlignment="Top" Margin="8,0,0,0"
+                                                        Background="{DynamicResource Brush.Surface}"
+                                                        BorderBrush="{DynamicResource Brush.Border}"
+                                                        Foreground="{DynamicResource Brush.TextPrimary}" />
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </DockPanel>
+                </GroupBox>
+            </Grid>
+
+            <!-- Footer: Save / Cancel -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="2" Margin="0,12,0,0">
+                <Button Content="Cancel" Width="90" Margin="0,0,8,0"
+                        Command="{Binding CancelCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                        Background="{DynamicResource Brush.Surface}"
+                        BorderBrush="{DynamicResource Brush.Border}"
+                        Foreground="{DynamicResource Brush.TextMuted}" />
+                <Button Content="Save" Width="90"
+                        Command="{Binding SaveCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                        Background="{DynamicResource Brush.Accent}"
+                        Foreground="White"
+                        BorderBrush="{x:Null}" />
+            </StackPanel>
+        </Grid>
+    </Border>
 </Window>

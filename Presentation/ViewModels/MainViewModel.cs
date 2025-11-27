@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Input;
 using VisualWorkflowBuilder.Application.Ports;
 using VisualWorkflowBuilder.Core.Entities;
+using VisualWorkflowBuilder.Presentation.ViewModels;
 using VisualWorkflowBuilder.UiImplementation.Commands;
 
 namespace VisualWorkflowBuilder.UiImplementation.ViewModels;
@@ -45,11 +46,22 @@ public class MainViewModel
 
     private void ShowEditWindow(object parameter)
     {
-        Console.WriteLine(parameter.ToString());
-        EditJobWindow editWindow = new EditJobWindow();
-        editWindow.Owner = parameter as MainWindow;
-        editWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-        editWindow.Show();
+      
+
+        if(parameter is not Job job)
+        {
+            return;
+        }
+
+        var editWindow = new EditJobWindow 
+        {
+            Owner = System.Windows.Application.Current.MainWindow,
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+            DataContext = new EditJobViewModel(job)
+        };
+        
+
+        editWindow.ShowDialog();
     }
     
     
