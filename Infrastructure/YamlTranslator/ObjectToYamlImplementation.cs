@@ -8,7 +8,7 @@ namespace VisualWorkflowBuilder.Infrastructure.YamlTranslator;
 
 public class ObjectToYamlImplementation : IObjectToYamlTranslator
 {
-    public void TranslateObjectToYaml(Workflow workflow)
+    public void TranslateObjectToYaml(Workflow workflow, string outputPath)
     {
         string OutPutPath = "C:\\Programmering\\YamlTestingForBachelor\\.github\\workflows\\";
         
@@ -17,7 +17,7 @@ public class ObjectToYamlImplementation : IObjectToYamlTranslator
             .WithQuotingNecessaryStrings()
             .Build();
         string Yaml = serializer.Serialize(workflow);
-        File.WriteAllText(Path.Combine(OutPutPath, "TestOfVisualBuilder.yaml"), Yaml);
+        File.WriteAllText(outputPath, Yaml);
         Console.WriteLine(Yaml);
     }
     

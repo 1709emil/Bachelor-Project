@@ -14,7 +14,7 @@ public class ObjectToYamlService
 
     public void test()
     {
-        translator.TranslateObjectToYaml(TestingWorkflow2());
+       
     }
     
     private Workflow TestingWorkflow()
