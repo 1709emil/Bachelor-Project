@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -14,8 +15,8 @@ namespace VisualWorkflowBuilder.Presentation.ViewModels
 
         public string Name { get; set; }
 
-        public ObservableCollection<string> PushBranches { get; }
-        public ObservableCollection<string> PullRequestBranches { get; }
+        public ObservableCollection<BranchEntry> PushBranches { get; }
+        public ObservableCollection<BranchEntry> PullRequestBranches { get; }
 
         public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }
@@ -30,11 +31,13 @@ namespace VisualWorkflowBuilder.Presentation.ViewModels
 
             Name = Workflow.Name ?? string.Empty;
 
-            PushBranches = new ObservableCollection<string>(
-                Workflow.On?.Push?.Branches ?? Array.Empty<string>());
+            PushBranches = new ObservableCollection<BranchEntry>(
+                (Workflow.On?.Push?.Branches ?? Array.Empty<string>())
+                .Select(s => new BranchEntry { Value = s }));
 
-            PullRequestBranches = new ObservableCollection<string>(
-                Workflow.On?.PullRequest?.Branches ?? Array.Empty<string>());
+            PullRequestBranches = new ObservableCollection<BranchEntry>(
+                (Workflow.On?.PullRequest?.Branches ?? Array.Empty<string>())
+                .Select(s => new BranchEntry { Value = s }));
 
             SaveCommand = new RelayCommand(Save, _ => true);
             CancelCommand = new RelayCommand(Cancel, _ => true);
@@ -46,22 +49,21 @@ namespace VisualWorkflowBuilder.Presentation.ViewModels
 
         private void Save(object parameter)
         {
-          
             Workflow.Name = Name;
 
-          
             if (Workflow.On == null) Workflow.On = new Triggers();
 
             var push = PushBranches
+                .Select(be => be.Value)
                 .Where(b => !string.IsNullOrWhiteSpace(b))
-                .Select(b => b.Trim())
+                .Select(b => b!.Trim())
                 .ToArray();
             Workflow.On.Push = push.Length > 0 ? new BranchTrigger { Branches = push } : null;
 
-       
             var pr = PullRequestBranches
+                .Select(be => be.Value)
                 .Where(b => !string.IsNullOrWhiteSpace(b))
-                .Select(b => b.Trim())
+                .Select(b => b!.Trim())
                 .ToArray();
             Workflow.On.PullRequest = pr.Length > 0 ? new BranchTrigger { Branches = pr } : null;
 
@@ -79,24 +81,42 @@ namespace VisualWorkflowBuilder.Presentation.ViewModels
 
         private void AddPushBranch(object parameter)
         {
-            PushBranches.Add(string.Empty);
+            PushBranches.Add(new BranchEntry { Value = string.Empty });
         }
 
         private void RemovePushBranch(object parameter)
         {
-            if (parameter is string s && PushBranches.Contains(s))
-                PushBranches.Remove(s);
+            if (parameter is BranchEntry entry && PushBranches.Contains(entry))
+                PushBranches.Remove(entry);
         }
 
         private void AddPullBranch(object parameter)
         {
-            PullRequestBranches.Add(string.Empty);
+            PullRequestBranches.Add(new BranchEntry { Value = string.Empty });
         }
 
         private void RemovePullBranch(object parameter)
         {
-            if (parameter is string s && PullRequestBranches.Contains(s))
-                PullRequestBranches.Remove(s);
+            if (parameter is BranchEntry entry && PullRequestBranches.Contains(entry))
+                PullRequestBranches.Remove(entry);
+        }
+
+        // Mutable, bindable wrapper used by the ListBox item template
+        public class BranchEntry : INotifyPropertyChanged
+        {
+            private string? _value;
+            public string? Value
+            {
+                get => _value;
+                set
+                {
+                    if (value == _value) return;
+                    _value = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Value)));
+                }
+            }
+
+            public event PropertyChangedEventHandler? PropertyChanged;
         }
     }
 }

@@ -1,5 +1,6 @@
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -12,12 +13,23 @@ using VisualWorkflowBuilder.UiImplementation.ViewModels;
 
 namespace VisualWorkflowBuilder.UiImplementation.ViewModels;
 
-public class MainViewModel
+public class MainViewModel : INotifyPropertyChanged
 {
     private IWorkFlowConstructor WorkFlowConstructor;
     private IObjectToYamlTranslator Translator ;
 
-    public Workflow CurrentWorkflow { get; set; } = new();
+    private Workflow _currentWorkflow = new();
+    public Workflow CurrentWorkflow
+    {
+        get => _currentWorkflow;
+        set
+        {
+            if (ReferenceEquals(_currentWorkflow, value)) return;
+            _currentWorkflow = value;
+            OnPropertyChanged(nameof(CurrentWorkflow));
+        }
+    }
+
     public ObservableCollection<JobNodeViewModel> Nodes { get; } = new();
 
     public ICommand AddJobToWorkspaceCommand { get; }
@@ -42,7 +54,6 @@ public class MainViewModel
         ShowEditWindowCommand = new RelayCommand(ShowEditWindow, _ => true);
         SaveWorkflowCommand = new RelayCommand(SaveWorkflow, _ => true);
         ShowEditWorkFlowConfigSettingsWindowCommand = new RelayCommand(ShowEditWorkFlowConfigSettingsWindow, _ => true);
-
     }
 
     private void AddJobToWorkspace(object? parameter)
@@ -80,16 +91,10 @@ public class MainViewModel
         {
             RecalculateLayout();
         }
-        else
-        {
-           
-        }
     }
 
     private void ShowEditWorkFlowConfigSettingsWindow(object? parameter)
     {
-
-     
         var editWindow = new EditWorkFlowConfigSettingsWindow
         {
             Owner = System.Windows.Application.Current.MainWindow,
@@ -97,13 +102,21 @@ public class MainViewModel
             DataContext = new EditWorkFlowConfigSettingsViewModel(CurrentWorkflow)
         };
 
-        
-        editWindow.ShowDialog();
+        // capture result and raise property changed so bindings update
+        var result = editWindow.ShowDialog();
+        if (result == true)
+        {
+            // The Workflow instance was mutated by the editor VM.
+            // Notify the view that CurrentWorkflow (and its bindings) may have changed.
+            OnPropertyChanged(nameof(CurrentWorkflow));
+
+            // If you bind to nested paths (e.g. CurrentWorkflow.On), you can also:
+            // OnPropertyChanged(nameof(CurrentWorkflow) + ".On"); // optional
+        }
     }
 
     private void SaveWorkflow(object? parameter)
     {
-     
         Workflow workflow = WorkFlowConstructor.ConstructWorkFlowWithParameters(CurrentWorkflow.Name, CurrentWorkflow.On, 
             Nodes.ToDictionary(n => n.Job.Name, n => n.Job));
 
@@ -131,7 +144,6 @@ public class MainViewModel
         }
     }
 
-
     public void RecalculateLayout()
     {
         var nodeByName = Nodes.ToDictionary(n => n.Job.Name);
@@ -154,12 +166,11 @@ public class MainViewModel
         {
             var parent = queue.Dequeue();
 
-           
             var children = Nodes.Where(n => n != parent && n.Job.Needs == parent.Job.Name).ToList();
             for (int ci = 0; ci < children.Count; ci++)
             {
                 var child = children[ci];
-               
+
                 child.CanvasLeft = parent.CanvasLeft + ci * (DefaultNodeWidth + 8) * 0.0; 
                 child.CanvasTop = parent.CanvasTop + DefaultNodeHeight + VerticalSpacing + ci * (DefaultNodeHeight + 8);
                 if (!handled.Contains(child))
@@ -170,7 +181,6 @@ public class MainViewModel
             }
         }
 
-       
         var remaining = Nodes.Except(handled).ToList();
         for (int i = 0; i < remaining.Count; i++)
         {
@@ -178,4 +188,8 @@ public class MainViewModel
             remaining[i].CanvasTop = TopMargin;
         }
     }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+    private void OnPropertyChanged(string propertyName) =>
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 }
