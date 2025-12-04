@@ -1,0 +1,178 @@
+﻿<Window x:Class="VisualWorkflowBuilder.Presentation.Views.EditWorkFlowConfigSettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Workflow Config Settings"
+        Height="800"
+        Width="1200"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource Brush.Window}">
+
+    <Border Style="{StaticResource Card}" Padding="12" Background="{DynamicResource Brush.Surface}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <StackPanel Orientation="Horizontal" Grid.Row="0" VerticalAlignment="Center" Margin="0,0,0,8">
+                <TextBlock Text="Workflow Name" FontWeight="SemiBold" Foreground="{DynamicResource Brush.TextPrimary}" VerticalAlignment="Center" Width="110"/>
+                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" MinWidth="320"
+                         Background="{DynamicResource Brush.SurfaceAlt}" Foreground="{DynamicResource Brush.TextPrimary}"
+                         BorderBrush="{DynamicResource Brush.Border}"/>
+            </StackPanel>
+
+            <!-- Triggers -->
+            <Grid Grid.Row="1" Margin="0,0,0,8" HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="24" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Push -->
+                <GroupBox Header="Push"
+                          Grid.Column="0"
+                          Foreground="{DynamicResource Brush.TextPrimary}"
+                          Background="{DynamicResource Brush.Surface}"
+                          MaxWidth="520"
+                          MinWidth="360"
+                          Margin="0,0,0,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <ListBox x:Name="PushList"
+                                 Grid.Row="0"
+                                 ItemsSource="{Binding PushBranches}"
+                                 HorizontalContentAlignment="Stretch"
+                                 VerticalAlignment="Stretch"
+                                 Background="{DynamicResource Brush.SurfaceAlt}"
+                                 BorderBrush="{DynamicResource Brush.Border}"
+                                 MaxHeight="520"
+                                 MinHeight="240">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="4">
+                                        <TextBlock Text="Branch name:" 
+                                                   FontSize="12"
+                                                   Margin="2,0,0,4"
+                                                   Foreground="{DynamicResource Brush.TextMuted}"/>
+                                        <TextBox Text="{Binding ., Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                 Background="{DynamicResource Brush.SurfaceAlt}"
+                                                 Foreground="{DynamicResource Brush.TextPrimary}"
+                                                 BorderBrush="{DynamicResource Brush.Border}"
+                                                 Padding="6"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+                            <Button Content="Add"
+                                    Command="{Binding AddPushBranchCommand}"
+                                    Width="84" Height="32"
+                                    Margin="0,0,8,0"
+                                    Background="{DynamicResource Brush.Accent}"
+                                    Foreground="White"
+                                    BorderBrush="{x:Null}"/>
+                            <Button Content="Remove"
+                                    Command="{Binding RemovePushBranchCommand}"
+                                    CommandParameter="{Binding ElementName=PushList, Path=SelectedItem}"
+                                    Width="84" Height="32"
+                                    Background="{DynamicResource Brush.Surface}"
+                                    Foreground="{DynamicResource Brush.TextPrimary}"
+                                    BorderBrush="{DynamicResource Brush.Border}"/>
+                        </StackPanel>
+                    </Grid>
+                </GroupBox>
+
+                <!-- Pull Request -->
+                <GroupBox Header="Pull Request"
+                          Grid.Column="2"
+                          Foreground="{DynamicResource Brush.TextPrimary}"
+                          Background="{DynamicResource Brush.Surface}"
+                          MaxWidth="520"
+                          MinWidth="360">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <ListBox x:Name="PullList"
+                                 Grid.Row="0"
+                                 ItemsSource="{Binding PullRequestBranches}"
+                                 HorizontalContentAlignment="Stretch"
+                                 VerticalAlignment="Stretch"
+                                 Background="{DynamicResource Brush.SurfaceAlt}"
+                                 BorderBrush="{DynamicResource Brush.Border}"
+                                 MaxHeight="520"
+                                 MinHeight="240">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="4">
+                                        <TextBlock Text="Branch name:" 
+                                                   FontSize="12"
+                                                   Margin="2,0,0,4"
+                                                   Foreground="{DynamicResource Brush.TextMuted}"/>
+                                        <TextBox Text="{Binding ., Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                 Background="{DynamicResource Brush.SurfaceAlt}"
+                                                 Foreground="{DynamicResource Brush.TextPrimary}"
+                                                 BorderBrush="{DynamicResource Brush.Border}"
+                                                 Padding="6"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+                            <Button Content="Add"
+                                    Command="{Binding AddPullBranchCommand}"
+                                    Width="84" Height="32"
+                                    Margin="0,0,8,0"
+                                    Background="{DynamicResource Brush.Accent}"
+                                    Foreground="White"
+                                    BorderBrush="{x:Null}"/>
+                            <Button Content="Remove"
+                                    Command="{Binding RemovePullBranchCommand}"
+                                    CommandParameter="{Binding ElementName=PullList, Path=SelectedItem}"
+                                    Width="84" Height="32"
+                                    Background="{DynamicResource Brush.Surface}"
+                                    Foreground="{DynamicResource Brush.TextPrimary}"
+                                    BorderBrush="{DynamicResource Brush.Border}"/>
+                        </StackPanel>
+                    </Grid>
+                </GroupBox>
+            </Grid>
+
+            <!-- Buttons -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Save"
+                        Width="90"
+                        Height="34"
+                        Margin="6,0,0,0"
+                        Command="{Binding SaveCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                        Background="{DynamicResource Brush.Accent}"
+                        Foreground="White"
+                        BorderBrush="{x:Null}"/>
+                <Button Content="Cancel"
+                        Width="90"
+                        Height="34"
+                        Margin="6,0,0,0"
+                        Command="{Binding CancelCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                        Background="{DynamicResource Brush.Surface}"
+                        Foreground="{DynamicResource Brush.TextPrimary}"
+                        BorderBrush="{DynamicResource Brush.Border}"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

@@ -14,12 +14,12 @@ public class ObjectToYamlService
 
     public void test()
     {
-       
+       //translator.TranslateObjectToYaml(TestingWorkflow(), "C:\\Temp\\testing_workflow.yaml");
     }
     
     private Workflow TestingWorkflow()
     {//method starting bracket
-     
+
         var wf = new Workflow
         {
             Name = "CI",
@@ -44,12 +44,12 @@ public class ObjectToYamlService
                         new Step {
                             Name = "Test",
                             Run = MutilineRunCmd(new[]
-                            { 
+                                {
                                 "npm ci",
                                 "npm test -- --reporter=junit",
                                 "echo \"ref=${{ github.ref }}\""
-                            }
-                            )
+                                }),
+                            With = new() { ["node-version"] = "20" }
                         }
                     }
                 }

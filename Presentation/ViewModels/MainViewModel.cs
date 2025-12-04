@@ -6,6 +6,7 @@ using System.Windows.Input;
 using VisualWorkflowBuilder.Application.Ports;
 using VisualWorkflowBuilder.Core.Entities;
 using VisualWorkflowBuilder.Presentation.ViewModels;
+using VisualWorkflowBuilder.Presentation.Views;
 using VisualWorkflowBuilder.UiImplementation.Commands;
 using VisualWorkflowBuilder.UiImplementation.ViewModels;
 
@@ -16,11 +17,14 @@ public class MainViewModel
     private IWorkFlowConstructor WorkFlowConstructor;
     private IObjectToYamlTranslator Translator ;
 
+    public Workflow CurrentWorkflow { get; set; } = new();
     public ObservableCollection<JobNodeViewModel> Nodes { get; } = new();
 
     public ICommand AddJobToWorkspaceCommand { get; }
     public ICommand ShowEditWindowCommand { get; }
     public ICommand SaveWorkflowCommand { get; }
+
+    public ICommand ShowEditWorkFlowConfigSettingsWindowCommand { get; }
 
     private const double LeftMargin = 20.0;
     private const double TopMargin = 20.0;
@@ -33,10 +37,11 @@ public class MainViewModel
     {
         WorkFlowConstructor = workFlowConstructor;
         Translator = objectToYamlTranslator;
-
+        
         AddJobToWorkspaceCommand = new RelayCommand(AddJobToWorkspace, _ => true);
         ShowEditWindowCommand = new RelayCommand(ShowEditWindow, _ => true);
         SaveWorkflowCommand = new RelayCommand(SaveWorkflow, _ => true);
+        ShowEditWorkFlowConfigSettingsWindowCommand = new RelayCommand(ShowEditWorkFlowConfigSettingsWindow, _ => true);
 
     }
 
@@ -81,14 +86,25 @@ public class MainViewModel
         }
     }
 
+    private void ShowEditWorkFlowConfigSettingsWindow(object? parameter)
+    {
+
+     
+        var editWindow = new EditWorkFlowConfigSettingsWindow
+        {
+            Owner = System.Windows.Application.Current.MainWindow,
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+            DataContext = new EditWorkFlowConfigSettingsViewModel(CurrentWorkflow)
+        };
+
+        
+        editWindow.ShowDialog();
+    }
+
     private void SaveWorkflow(object? parameter)
     {
-        Triggers triggers = new Triggers();
-        triggers.Push = new BranchTrigger
-        {
-            Branches = ["main"]
-        };
-        Workflow workflow = WorkFlowConstructor.ConstructWorkFlowWithParameters("MyWorkflow", triggers, 
+     
+        Workflow workflow = WorkFlowConstructor.ConstructWorkFlowWithParameters(CurrentWorkflow.Name, CurrentWorkflow.On, 
             Nodes.ToDictionary(n => n.Job.Name, n => n.Job));
 
         var dlg = new SaveFileDialog

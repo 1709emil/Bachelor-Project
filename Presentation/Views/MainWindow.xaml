@@ -34,10 +34,12 @@
                             Background="{DynamicResource Brush.Accent}" Foreground="White"
                             BorderBrush="{x:Null}" 
                             Command="{Binding SaveWorkflowCommand}"/>
-                    <Button Content="…" Padding="10,6"
+                    <Button Content="Edit Workflow Config Settings" Padding="10,6"
                             Background="{DynamicResource Brush.Surface}" 
                             Foreground="{DynamicResource Brush.TextPrimary}"
-                            BorderBrush="{DynamicResource Brush.Border}" />
+                            BorderBrush="{DynamicResource Brush.Border}" 
+                            Command="{Binding ShowEditWorkFlowConfigSettingsWindowCommand}"
+                            />
                 </StackPanel>
             </Grid>
         </Border>
