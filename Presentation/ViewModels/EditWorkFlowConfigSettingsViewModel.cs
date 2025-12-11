@@ -101,7 +101,7 @@ namespace VisualWorkflowBuilder.Presentation.ViewModels
                 PullRequestBranches.Remove(entry);
         }
 
-        // Mutable, bindable wrapper used by the ListBox item template
+        
         public class BranchEntry : INotifyPropertyChanged
         {
             private string? _value;

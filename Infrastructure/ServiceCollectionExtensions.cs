@@ -12,6 +12,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IObjectToYamlTranslator, ObjectToYamlImplementation>();
         services.AddScoped<IWorkFlowConstructor, WorkFlowConstructorImplementation>();
+        services.AddScoped<IBuildJobConstructor, MavenBuildJobImplementation>();
         return services;
     }
 }

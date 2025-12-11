@@ -9,14 +9,15 @@ using VisualWorkflowBuilder.Core.Entities;
 using VisualWorkflowBuilder.Presentation.ViewModels;
 using VisualWorkflowBuilder.Presentation.Views;
 using VisualWorkflowBuilder.UiImplementation.Commands;
-using VisualWorkflowBuilder.UiImplementation.ViewModels;
+
 
 namespace VisualWorkflowBuilder.UiImplementation.ViewModels;
 
 public class MainViewModel : INotifyPropertyChanged
 {
     private IWorkFlowConstructor WorkFlowConstructor;
-    private IObjectToYamlTranslator Translator ;
+    private IObjectToYamlTranslator Translator;
+    private IEnumerable<IBuildJobConstructor> BuildJobConstructors;
 
     private Workflow _currentWorkflow = new();
     public Workflow CurrentWorkflow
@@ -33,6 +34,7 @@ public class MainViewModel : INotifyPropertyChanged
     public ObservableCollection<JobNodeViewModel> Nodes { get; } = new();
 
     public ICommand AddJobToWorkspaceCommand { get; }
+    public ICommand AddBuildJobMavenToWorkspaceCommand { get; }
     public ICommand RemoveJobFromWorkspaceCommand { get; }
     public ICommand ShowEditWindowCommand { get; }
     public ICommand SaveWorkflowCommand { get; }
@@ -46,12 +48,14 @@ public class MainViewModel : INotifyPropertyChanged
     private const double DefaultNodeWidth = 160.0;
     private const double DefaultNodeHeight = 100.0;
 
-    public MainViewModel(IWorkFlowConstructor workFlowConstructor, IObjectToYamlTranslator objectToYamlTranslator)
+    public MainViewModel(IWorkFlowConstructor workFlowConstructor, IObjectToYamlTranslator objectToYamlTranslator, IEnumerable<IBuildJobConstructor> buildJobConstructors)
     {
         WorkFlowConstructor = workFlowConstructor;
         Translator = objectToYamlTranslator;
-        
+        BuildJobConstructors = buildJobConstructors;
+
         AddJobToWorkspaceCommand = new RelayCommand(AddJobToWorkspace, _ => true);
+        AddBuildJobMavenToWorkspaceCommand = new RelayCommand(AddBuildJobMavenToWorkspace, _ => true);
         ShowEditWindowCommand = new RelayCommand(ShowEditWindow, _ => true);
         SaveWorkflowCommand = new RelayCommand(SaveWorkflow, _ => true);
         ShowEditWorkFlowConfigSettingsWindowCommand = new RelayCommand(ShowEditWorkFlowConfigSettingsWindow, _ => true);
@@ -60,17 +64,23 @@ public class MainViewModel : INotifyPropertyChanged
 
     private void AddJobToWorkspace(object? parameter)
     {
-        var job = new Job() { Name = $"Job {Nodes.Count + 1}" };
-        var node = new JobNodeViewModel(job);
+        Job job = new Job() { Name = $"Job {Nodes.Count + 1}" };
+        
+        EditNewNodePositions(job);
 
-        var topNodes = Nodes.Where(n => string.IsNullOrWhiteSpace(n.Job.Needs)
-                                        || !Nodes.Any(x => x.Job.Name == n.Job.Needs)).ToList();
+        RecalculateLayout();
+    }
 
-        node.CanvasLeft = LeftMargin + topNodes.Count * HorizontalSpacing;
-        node.CanvasTop = TopMargin;
+    private void AddBuildJobMavenToWorkspace(object? parameter)
+    {
+        IBuildJobConstructor? mavenConstructor = BuildJobConstructors
+                                                .FirstOrDefault(c => c.GetType().Name.Contains("Maven", StringComparison.OrdinalIgnoreCase));
+        if (mavenConstructor == null)
+            return;
+        
+        Job job =  mavenConstructor.ConstructBuildJobWithName($"Build With Maven {Nodes.Count + 1}");
 
-        Nodes.Add(node);
-
+        EditNewNodePositions(job);
         RecalculateLayout();
     }
 
@@ -94,10 +104,10 @@ public class MainViewModel : INotifyPropertyChanged
     private void ShowEditWindow(object? parameter)
     {
         if (parameter is not JobNodeViewModel nodeVm) return;
-        var originalNeeds = nodeVm.Job.Needs;
-        var originalName = nodeVm.Job.Name;
+        string originalNeeds = nodeVm.Job.Needs;
+        string originalName = nodeVm.Job.Name;
 
-        var editWindow = new EditJobWindow
+        EditJobWindow editWindow = new EditJobWindow
         {
             Owner = System.Windows.Application.Current.MainWindow,
             WindowStartupLocation = WindowStartupLocation.CenterOwner,
@@ -114,7 +124,7 @@ public class MainViewModel : INotifyPropertyChanged
 
     private void ShowEditWorkFlowConfigSettingsWindow(object? parameter)
     {
-        var editWindow = new EditWorkFlowConfigSettingsWindow
+        EditWorkFlowConfigSettingsWindow editWindow = new EditWorkFlowConfigSettingsWindow
         {
             Owner = System.Windows.Application.Current.MainWindow,
             WindowStartupLocation = WindowStartupLocation.CenterOwner,
@@ -122,7 +132,7 @@ public class MainViewModel : INotifyPropertyChanged
         };
 
        
-        var result = editWindow.ShowDialog();
+        bool? result = editWindow.ShowDialog();
         if (result == true)
         {
          
@@ -137,7 +147,7 @@ public class MainViewModel : INotifyPropertyChanged
         Workflow workflow = WorkFlowConstructor.ConstructWorkFlowWithParameters(CurrentWorkflow.Name, CurrentWorkflow.On, 
             Nodes.ToDictionary(n => n.Job.Name, n => n.Job));
 
-        var dlg = new SaveFileDialog
+        SaveFileDialog dlg = new SaveFileDialog
         {
             Title = "Save workflow as",
             Filter = "YAML files (*.yaml;*.yml)|*.yaml;*.yml|All files (*.*)|*.*",
@@ -146,7 +156,7 @@ public class MainViewModel : INotifyPropertyChanged
             InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
         };
 
-        var result = dlg.ShowDialog();
+        bool? result = dlg.ShowDialog();
         if (result != true || string.IsNullOrWhiteSpace(dlg.FileName))
             return;
 
@@ -204,6 +214,16 @@ public class MainViewModel : INotifyPropertyChanged
             remaining[i].CanvasLeft = LeftMargin + (topLevel.Count + i) * HorizontalSpacing;
             remaining[i].CanvasTop = TopMargin;
         }
+    }
+
+    private void EditNewNodePositions(Job job)
+    {
+        JobNodeViewModel node = new JobNodeViewModel(job);
+        List<JobNodeViewModel> topNodes = Nodes.Where(n => string.IsNullOrWhiteSpace(n.Job.Needs)
+                                        || !Nodes.Any(x => x.Job.Name == n.Job.Needs)).ToList();
+        node.CanvasLeft = LeftMargin + topNodes.Count * HorizontalSpacing;
+        node.CanvasTop = TopMargin;
+        Nodes.Add(node);
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

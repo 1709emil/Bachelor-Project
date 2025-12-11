@@ -35,4 +35,8 @@
       </ApplicationDefinition>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Infrastructure\JobConstruction\" />
+    </ItemGroup>
+
 </Project>
