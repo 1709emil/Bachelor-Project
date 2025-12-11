@@ -12,8 +12,8 @@
         <SolidColorBrush x:Key="Brush.TextPrimary" Color="#EAEAEA"/>
         <SolidColorBrush x:Key="Brush.TextMuted"   Color="#B7B7B7"/>
         <SolidColorBrush x:Key="Brush.GreenBack"   Color="LawnGreen" />
-        <SolidColorBrush x:Key="Brush.MavenBack"   Color="#f2db05" />
-        <SolidColorBrush x:Key="Brush.RedBack"   Color="Crimson" />
+        <SolidColorBrush x:Key="Brush.BuildBack"   Color="#f2db05" />
+        <SolidColorBrush x:Key="Brush.DotNetBack"   Color="Crimson" />
 
         <!-- Default Styles -->
         <Style TargetType="TextBlock">

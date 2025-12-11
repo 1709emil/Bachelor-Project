@@ -10,9 +10,10 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
-        services.AddScoped<IObjectToYamlTranslator, ObjectToYamlImplementation>();
-        services.AddScoped<IWorkFlowConstructor, WorkFlowConstructorImplementation>();
-        services.AddScoped<IBuildJobConstructor, MavenBuildJobImplementation>();
+        services.AddTransient<IObjectToYamlTranslator, ObjectToYamlImplementation>();
+        services.AddTransient<IWorkFlowConstructor, WorkFlowConstructorImplementation>();
+        services.AddTransient<IBuildJobConstructor, MavenBuildJobImplementation>();
+        services.AddTransient<IBuildJobConstructor, DotNetBuildJobImplementation>();
         return services;
     }
 }

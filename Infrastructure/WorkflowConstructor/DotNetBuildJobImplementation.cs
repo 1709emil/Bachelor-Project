@@ -8,13 +8,13 @@ using VisualWorkflowBuilder.Core.Entities;
 
 namespace VisualWorkflowBuilder.Infrastructure.WorkflowConstructor
 {
-    public class MavenBuildJobImplementation : IBuildJobConstructor
+    public class DotNetBuildJobImplementation : IBuildJobConstructor
     {
         public Job ConstructBuildJobNoParameters()
         {
-           Job Job = new Job
+            Job Job = new Job
             {
-                Name = "Maven Build Job",
+                Name = "Build",
                 RunsOn = "ubuntu-latest",
                 Steps = new List<Step>
                 {
@@ -25,26 +25,32 @@ namespace VisualWorkflowBuilder.Infrastructure.WorkflowConstructor
                     },
                     new Step
                     {
-                        Name = "Set up JDK 11",
-                        Uses = "actions/setup-java@v2",
+                        Name = "Set up .NET",
+                        Uses = "actions/setup-dotnet@v1",
                         With = new Dictionary<string, string>
                         {
-                            { "java-version", "11" }
+                            { "dotnet-version", "9.0.x" }
                         }
                     },
                     new Step
                     {
-                        Name = "Build with Maven",
-                        Run = "mvn clean install"
+                        Name = "Restore dependencies",
+                        Run = "dotnet restore"
+                    },
+                    new Step
+                    {
+                        Name = "Build",
+                        Run = "dotnet build --no-restore --configuration Release"
                     }
                 }
+               
             };
             return Job;
         }
 
         public Job ConstructBuildJobWithFullParameters(string name, string runsOn, Step steps)
         {
-           Job Job = new Job
+            Job Job = new Job
             {
                 Name = name,
                 RunsOn = runsOn,
@@ -53,11 +59,11 @@ namespace VisualWorkflowBuilder.Infrastructure.WorkflowConstructor
             return Job;
         }
 
-        public Job ConstructBuildJobWithName(string name)
+        public Job ConstructBuildJobWithName(string Name)
         {
-            Job Job = new Job
+            Job job = new Job
             {
-                Name = name,
+                Name = Name,
                 RunsOn = "ubuntu-latest",
                 Steps = new List<Step>
                 {
@@ -68,21 +74,26 @@ namespace VisualWorkflowBuilder.Infrastructure.WorkflowConstructor
                     },
                     new Step
                     {
-                        Name = "Set up JDK 11",
-                        Uses = "actions/setup-java@v2",
+                        Name = "Set up .NET",
+                        Uses = "actions/setup-dotnet@v1",
                         With = new Dictionary<string, string>
                         {
-                            { "java-version", "11" }
+                            { "dotnet-version", "9.0.x" }
                         }
                     },
                     new Step
                     {
-                        Name = "Build with Maven",
-                        Run = "mvn clean install"
+                        Name = "Restore dependencies",
+                        Run = "dotnet restore"
+                    },
+                    new Step
+                    {
+                        Name = "Build",
+                        Run = "dotnet build --no-restore --configuration Release"
                     }
                 }
             };
-            return Job;
+            return job;
         }
     }
 }

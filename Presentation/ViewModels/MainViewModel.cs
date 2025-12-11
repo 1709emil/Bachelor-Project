@@ -35,6 +35,7 @@ public class MainViewModel : INotifyPropertyChanged
 
     public ICommand AddJobToWorkspaceCommand { get; }
     public ICommand AddBuildJobMavenToWorkspaceCommand { get; }
+    public ICommand AddBuildJobDotNetToWorkspaceCommand { get; }
     public ICommand RemoveJobFromWorkspaceCommand { get; }
     public ICommand ShowEditWindowCommand { get; }
     public ICommand SaveWorkflowCommand { get; }
@@ -56,6 +57,7 @@ public class MainViewModel : INotifyPropertyChanged
 
         AddJobToWorkspaceCommand = new RelayCommand(AddJobToWorkspace, _ => true);
         AddBuildJobMavenToWorkspaceCommand = new RelayCommand(AddBuildJobMavenToWorkspace, _ => true);
+        AddBuildJobDotNetToWorkspaceCommand = new RelayCommand(AddBuildJobDotNetToWorkspace, _ => true);
         ShowEditWindowCommand = new RelayCommand(ShowEditWindow, _ => true);
         SaveWorkflowCommand = new RelayCommand(SaveWorkflow, _ => true);
         ShowEditWorkFlowConfigSettingsWindowCommand = new RelayCommand(ShowEditWorkFlowConfigSettingsWindow, _ => true);
@@ -84,6 +86,17 @@ public class MainViewModel : INotifyPropertyChanged
         RecalculateLayout();
     }
 
+    private void AddBuildJobDotNetToWorkspace(object? parameter)
+    {
+        IBuildJobConstructor? dotNetConstructor = BuildJobConstructors
+                                                .FirstOrDefault(c => c.GetType().Name.Contains("DotNet", StringComparison.OrdinalIgnoreCase));
+        if (dotNetConstructor == null)
+            return;
+        
+        Job job =  dotNetConstructor.ConstructBuildJobWithName($"Build With .NET {Nodes.Count + 1}");
+        EditNewNodePositions(job);
+        RecalculateLayout();
+    }
     private void RemoveJobFromWorkspace(object? parameter)
     {
         if (parameter is not JobNodeViewModel nodeVm) return;
