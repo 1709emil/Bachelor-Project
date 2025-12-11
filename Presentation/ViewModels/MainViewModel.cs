@@ -18,6 +18,8 @@ public class MainViewModel : INotifyPropertyChanged
     private IWorkFlowConstructor WorkFlowConstructor;
     private IObjectToYamlTranslator Translator;
     private IEnumerable<IBuildJobConstructor> BuildJobConstructors;
+    private ILintingJobConstructor LintingJobConstructor;
+    private IEnumerable<ITestingJobConstructor> TestingJobConstructors;
 
     private Workflow _currentWorkflow = new();
     public Workflow CurrentWorkflow
@@ -36,6 +38,12 @@ public class MainViewModel : INotifyPropertyChanged
     public ICommand AddJobToWorkspaceCommand { get; }
     public ICommand AddBuildJobMavenToWorkspaceCommand { get; }
     public ICommand AddBuildJobDotNetToWorkspaceCommand { get; }
+    public ICommand AddLintingJobToWorkspaceCommand { get; }
+    public ICommand AddTestingJobDotNetToWorkspaceCommand { get; }
+    public ICommand AddTestingJobJUnitToWorkspaceCommand { get; }
+
+
+
     public ICommand RemoveJobFromWorkspaceCommand { get; }
     public ICommand ShowEditWindowCommand { get; }
     public ICommand SaveWorkflowCommand { get; }
@@ -49,15 +57,22 @@ public class MainViewModel : INotifyPropertyChanged
     private const double DefaultNodeWidth = 160.0;
     private const double DefaultNodeHeight = 100.0;
 
-    public MainViewModel(IWorkFlowConstructor workFlowConstructor, IObjectToYamlTranslator objectToYamlTranslator, IEnumerable<IBuildJobConstructor> buildJobConstructors)
+    public MainViewModel(IWorkFlowConstructor workFlowConstructor, IObjectToYamlTranslator objectToYamlTranslator, IEnumerable<IBuildJobConstructor> buildJobConstructors,ILintingJobConstructor lintingJobConstructor, IEnumerable<ITestingJobConstructor> testingJobConstructors)
     {
         WorkFlowConstructor = workFlowConstructor;
         Translator = objectToYamlTranslator;
         BuildJobConstructors = buildJobConstructors;
+        LintingJobConstructor = lintingJobConstructor;
+        TestingJobConstructors = testingJobConstructors;
 
         AddJobToWorkspaceCommand = new RelayCommand(AddJobToWorkspace, _ => true);
         AddBuildJobMavenToWorkspaceCommand = new RelayCommand(AddBuildJobMavenToWorkspace, _ => true);
         AddBuildJobDotNetToWorkspaceCommand = new RelayCommand(AddBuildJobDotNetToWorkspace, _ => true);
+        AddLintingJobToWorkspaceCommand = new RelayCommand(AddLintingJobToWorkspace, _ => true);
+        AddTestingJobDotNetToWorkspaceCommand = new RelayCommand(AddTestingJobDotNetToWorkspace, _ => true);
+        AddTestingJobJUnitToWorkspaceCommand = new RelayCommand(AddTestingJobJUnitToWorkspace, _ => true);
+
+
         ShowEditWindowCommand = new RelayCommand(ShowEditWindow, _ => true);
         SaveWorkflowCommand = new RelayCommand(SaveWorkflow, _ => true);
         ShowEditWorkFlowConfigSettingsWindowCommand = new RelayCommand(ShowEditWorkFlowConfigSettingsWindow, _ => true);
@@ -97,10 +112,40 @@ public class MainViewModel : INotifyPropertyChanged
         EditNewNodePositions(job);
         RecalculateLayout();
     }
+
+    private void AddLintingJobToWorkspace(object? parameter)
+    {
+        Job job = LintingJobConstructor.ConstructLintingJobWithName($"Linting Job {Nodes.Count + 1}");
+        EditNewNodePositions(job);
+        RecalculateLayout();
+    }
+    private void AddTestingJobDotNetToWorkspace(object? parameter)
+    {
+        ITestingJobConstructor? testingConstructor = TestingJobConstructors
+                                                .FirstOrDefault(c => c.GetType().Name.Contains("DotNet", StringComparison.OrdinalIgnoreCase));
+        if (testingConstructor == null)
+            return;
+        
+        Job job =  testingConstructor.ConstructTestingJobWithName($"Testing With .NET Job {Nodes.Count + 1}");
+        EditNewNodePositions(job);
+        RecalculateLayout();
+    }
+
+    private void AddTestingJobJUnitToWorkspace(object? parameter)
+    {
+        ITestingJobConstructor? junitConstructor = TestingJobConstructors
+                                                .FirstOrDefault(c => c.GetType().Name.Contains("JUnit", StringComparison.OrdinalIgnoreCase));
+        if (junitConstructor == null)
+            return;
+        
+        Job job =  junitConstructor.ConstructTestingJobWithName($"Testing With JUnit Job {Nodes.Count + 1}");
+        EditNewNodePositions(job);
+        RecalculateLayout();
+    }
     private void RemoveJobFromWorkspace(object? parameter)
     {
         if (parameter is not JobNodeViewModel nodeVm) return;
-        
+
         var result = MessageBox.Show(
         $"Are you sure you want to remove '{nodeVm.Job.Name}'?",
         "Confirm Removal",
@@ -113,6 +158,7 @@ public class MainViewModel : INotifyPropertyChanged
         Nodes.Remove(nodeVm);
         RecalculateLayout();
     }
+
 
     private void ShowEditWindow(object? parameter)
     {

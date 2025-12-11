@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using VisualWorkflowBuilder.Application.Ports;
+using VisualWorkflowBuilder.Infrastructure.JobConstruction;
 using VisualWorkflowBuilder.Infrastructure.WorkflowConstructor;
 using VisualWorkflowBuilder.Infrastructure.YamlTranslator;
 
@@ -14,6 +15,9 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IWorkFlowConstructor, WorkFlowConstructorImplementation>();
         services.AddTransient<IBuildJobConstructor, MavenBuildJobImplementation>();
         services.AddTransient<IBuildJobConstructor, DotNetBuildJobImplementation>();
+        services.AddTransient<ILintingJobConstructor, LintingJobImplementation>();
+        services.AddTransient<ITestingJobConstructor, DotNetTestingJobImplementation>();
+        services.AddTransient<ITestingJobConstructor, JUnitTestingJobImplementation>();
         return services;
     }
 }

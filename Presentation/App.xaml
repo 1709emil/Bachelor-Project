@@ -13,7 +13,7 @@
         <SolidColorBrush x:Key="Brush.TextMuted"   Color="#B7B7B7"/>
         <SolidColorBrush x:Key="Brush.GreenBack"   Color="LawnGreen" />
         <SolidColorBrush x:Key="Brush.BuildBack"   Color="#f2db05" />
-        <SolidColorBrush x:Key="Brush.DotNetBack"   Color="Crimson" />
+        <SolidColorBrush x:Key="Brush.LintingBack"   Color="#05dbf2" />
 
         <!-- Default Styles -->
         <Style TargetType="TextBlock">

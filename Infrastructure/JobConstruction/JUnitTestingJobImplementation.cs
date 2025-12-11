@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 using VisualWorkflowBuilder.Application.Ports;
 using VisualWorkflowBuilder.Core.Entities;
 
-namespace VisualWorkflowBuilder.Infrastructure.WorkflowConstructor
+namespace VisualWorkflowBuilder.Infrastructure.JobConstruction
 {
-    public class MavenBuildJobImplementation : IBuildJobConstructor
+    public class JUnitTestingJobImplementation : ITestingJobConstructor
     {
-        public Job ConstructBuildJobNoParameters()
+        public Job ConstructTestingJobNoParameters()
         {
-           Job Job = new Job
+            Job job = new Job
             {
-                Name = "Maven Build Job",
+                Name = "JUnit Testing Job",
                 RunsOn = "ubuntu-latest",
                 Steps = new List<Step>
                 {
@@ -29,35 +29,36 @@ namespace VisualWorkflowBuilder.Infrastructure.WorkflowConstructor
                         Uses = "actions/setup-java@v2",
                         With = new Dictionary<string, string>
                         {
-                            { "java-version", "11" }
+                            {"distribution", "termurin" },
+                            { "java-version", "17" }
                         }
                     },
                     new Step
                     {
-                        Name = "Build with Maven",
-                        Run = "mvn clean install"
+                        Name = "Run JUnit tests",
+                        Run = "mvn -B test"
                     }
                 }
             };
-            return Job;
+            return job;
         }
 
-        public Job ConstructBuildJobWithFullParameters(string name, string runsOn, Step steps)
+        public Job ConstructTestingJobWithFullParameters(string name, string runsOn, Step steps)
         {
-           Job Job = new Job
+            Job job = new Job
             {
                 Name = name,
                 RunsOn = runsOn,
                 Steps = new List<Step> { steps }
             };
-            return Job;
+            return job;
         }
 
-        public Job ConstructBuildJobWithName(string name)
+        public Job ConstructTestingJobWithName(string Name)
         {
-            Job Job = new Job
+            Job job = new Job
             {
-                Name = name,
+                Name = Name,
                 RunsOn = "ubuntu-latest",
                 Steps = new List<Step>
                 {
@@ -72,17 +73,18 @@ namespace VisualWorkflowBuilder.Infrastructure.WorkflowConstructor
                         Uses = "actions/setup-java@v2",
                         With = new Dictionary<string, string>
                         {
-                            { "java-version", "11" }
+                            {"distribution", "termurin" },
+                            { "java-version", "17" }
                         }
                     },
                     new Step
                     {
-                        Name = "Build with Maven",
-                        Run = "mvn clean install"
+                        Name = "Run JUnit tests",
+                        Run = "mvn -B test"
                     }
                 }
             };
-            return Job;
+            return job;
         }
     }
 }

@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 using VisualWorkflowBuilder.Application.Ports;
 using VisualWorkflowBuilder.Core.Entities;
 
-namespace VisualWorkflowBuilder.Infrastructure.WorkflowConstructor
+namespace VisualWorkflowBuilder.Infrastructure.JobConstruction
 {
-    public class DotNetBuildJobImplementation : IBuildJobConstructor
+    public class LintingJobImplementation : ILintingJobConstructor
     {
-        public Job ConstructBuildJobNoParameters()
+        public Job ConstructLintingJobNoParameters()
         {
-            Job Job = new Job
+            Job job = new Job
             {
-                Name = "Build",
+                Name = "Linting Job",
                 RunsOn = "ubuntu-latest",
                 Steps = new List<Step>
                 {
@@ -25,41 +25,41 @@ namespace VisualWorkflowBuilder.Infrastructure.WorkflowConstructor
                     },
                     new Step
                     {
-                        Name = "Set up .NET",
-                        Uses = "actions/setup-dotnet@v1",
+                        Name = "Set up Node.js",
+                        Uses = "actions/setup-node@v2",
                         With = new Dictionary<string, string>
                         {
-                            { "dotnet-version", "9.0.x" }
+                            { "node-version", "14" }
                         }
                     },
                     new Step
                     {
-                        Name = "Restore dependencies",
-                        Run = "dotnet restore"
+                        Name = "Install dependencies",
+                        Run = "npm install"
                     },
                     new Step
                     {
-                        Name = "Build",
-                        Run = "dotnet build --no-restore --configuration Release"
+                        Name = "Run linter",
+                        Run = "npm run lint"
                     }
                 }
-               
             };
-            return Job;
+
+            return job;
         }
 
-        public Job ConstructBuildJobWithFullParameters(string name, string runsOn, Step steps)
+        public Job ConstructLintingJobWithFullParameters(string name, string runsOn, Step steps)
         {
-            Job Job = new Job
+            Job job = new Job
             {
                 Name = name,
                 RunsOn = runsOn,
                 Steps = new List<Step> { steps }
             };
-            return Job;
+            return job;
         }
 
-        public Job ConstructBuildJobWithName(string Name)
+        public Job ConstructLintingJobWithName(string Name)
         {
             Job job = new Job
             {
@@ -74,22 +74,22 @@ namespace VisualWorkflowBuilder.Infrastructure.WorkflowConstructor
                     },
                     new Step
                     {
-                        Name = "Set up .NET",
-                        Uses = "actions/setup-dotnet@v1",
+                        Name = "Set up Node.js",
+                        Uses = "actions/setup-node@v2",
                         With = new Dictionary<string, string>
                         {
-                            { "dotnet-version", "9.0.x" }
+                            { "node-version", "14" }
                         }
                     },
                     new Step
                     {
-                        Name = "Restore dependencies",
-                        Run = "dotnet restore"
+                        Name = "Install dependencies",
+                        Run = "npm install"
                     },
                     new Step
                     {
-                        Name = "Build",
-                        Run = "dotnet build --no-restore --configuration Release"
+                        Name = "Run linter",
+                        Run = "npm run lint"
                     }
                 }
             };
