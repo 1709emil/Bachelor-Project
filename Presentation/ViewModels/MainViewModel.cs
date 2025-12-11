@@ -33,6 +33,7 @@ public class MainViewModel : INotifyPropertyChanged
     public ObservableCollection<JobNodeViewModel> Nodes { get; } = new();
 
     public ICommand AddJobToWorkspaceCommand { get; }
+    public ICommand RemoveJobFromWorkspaceCommand { get; }
     public ICommand ShowEditWindowCommand { get; }
     public ICommand SaveWorkflowCommand { get; }
 
@@ -54,6 +55,7 @@ public class MainViewModel : INotifyPropertyChanged
         ShowEditWindowCommand = new RelayCommand(ShowEditWindow, _ => true);
         SaveWorkflowCommand = new RelayCommand(SaveWorkflow, _ => true);
         ShowEditWorkFlowConfigSettingsWindowCommand = new RelayCommand(ShowEditWorkFlowConfigSettingsWindow, _ => true);
+        RemoveJobFromWorkspaceCommand = new RelayCommand(RemoveJobFromWorkspace, _ => true);
     }
 
     private void AddJobToWorkspace(object? parameter)
@@ -69,6 +71,23 @@ public class MainViewModel : INotifyPropertyChanged
 
         Nodes.Add(node);
 
+        RecalculateLayout();
+    }
+
+    private void RemoveJobFromWorkspace(object? parameter)
+    {
+        if (parameter is not JobNodeViewModel nodeVm) return;
+        
+        var result = MessageBox.Show(
+        $"Are you sure you want to remove '{nodeVm.Job.Name}'?",
+        "Confirm Removal",
+        MessageBoxButton.YesNo,
+        MessageBoxImage.Question);
+
+        if (result != MessageBoxResult.Yes)
+            return;
+
+        Nodes.Remove(nodeVm);
         RecalculateLayout();
     }
 
@@ -102,16 +121,14 @@ public class MainViewModel : INotifyPropertyChanged
             DataContext = new EditWorkFlowConfigSettingsViewModel(CurrentWorkflow)
         };
 
-        // capture result and raise property changed so bindings update
+       
         var result = editWindow.ShowDialog();
         if (result == true)
         {
-            // The Workflow instance was mutated by the editor VM.
-            // Notify the view that CurrentWorkflow (and its bindings) may have changed.
+         
             OnPropertyChanged(nameof(CurrentWorkflow));
 
-            // If you bind to nested paths (e.g. CurrentWorkflow.On), you can also:
-            // OnPropertyChanged(nameof(CurrentWorkflow) + ".On"); // optional
+            
         }
     }
 
