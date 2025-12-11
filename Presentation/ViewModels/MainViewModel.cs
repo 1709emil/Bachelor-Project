@@ -157,6 +157,22 @@ public class MainViewModel : INotifyPropertyChanged
 
     private void SaveWorkflow(object? parameter)
     {
+       
+        if (!IsWorkflowConfigValid())
+        {
+            MessageBoxResult validationResult = MessageBox.Show(
+                "Workflow configuration is incomplete. Please fill out the workflow name and triggers before generating the YAML file.\n\nWould you like to edit the workflow config settings now?",
+                "Incomplete Configuration",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (validationResult == MessageBoxResult.Yes)
+            {
+                ShowEditWorkFlowConfigSettingsWindow(null);
+            }
+            return;
+        }
+
         Workflow workflow = WorkFlowConstructor.ConstructWorkFlowWithParameters(CurrentWorkflow.Name, CurrentWorkflow.On, 
             Nodes.ToDictionary(n => n.Job.Name, n => n.Job));
 
@@ -182,6 +198,23 @@ public class MainViewModel : INotifyPropertyChanged
         {
             MessageBox.Show($"Failed to save workflow: {ex.Message}", "Save error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
+    }
+
+    private bool IsWorkflowConfigValid()
+    {
+        
+        if (string.IsNullOrWhiteSpace(CurrentWorkflow.Name))
+        {
+            return false;
+        }
+
+        
+        if (CurrentWorkflow.On == null)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     public void RecalculateLayout()
