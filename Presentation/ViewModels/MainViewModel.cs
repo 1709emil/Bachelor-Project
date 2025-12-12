@@ -1,6 +1,7 @@
 using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -17,6 +18,7 @@ public class MainViewModel : INotifyPropertyChanged
 {
     private IWorkFlowConstructor WorkFlowConstructor;
     private IObjectToYamlTranslator Translator;
+    private IYamlToObjectTranslator YamlToObjectTranslator;
     private IEnumerable<IBuildJobConstructor> BuildJobConstructors;
     private ILintingJobConstructor LintingJobConstructor;
     private IEnumerable<ITestingJobConstructor> TestingJobConstructors;
@@ -49,6 +51,7 @@ public class MainViewModel : INotifyPropertyChanged
     public ICommand RemoveJobFromWorkspaceCommand { get; }
     public ICommand ShowEditWindowCommand { get; }
     public ICommand SaveWorkflowCommand { get; }
+    public ICommand LoadWorkflowCommand { get; }
 
     public ICommand ShowEditWorkFlowConfigSettingsWindowCommand { get; }
 
@@ -60,11 +63,13 @@ public class MainViewModel : INotifyPropertyChanged
     private const double DefaultNodeHeight = 100.0;
 
     public MainViewModel(IWorkFlowConstructor workFlowConstructor, IObjectToYamlTranslator objectToYamlTranslator, 
+        IYamlToObjectTranslator yamlToObjectTranslator,
         IEnumerable<IBuildJobConstructor> buildJobConstructors,ILintingJobConstructor lintingJobConstructor, 
         IEnumerable<ITestingJobConstructor> testingJobConstructors, IDelpoyJobConstructor delpoyJobConstructor)
     {
         WorkFlowConstructor = workFlowConstructor;
         Translator = objectToYamlTranslator;
+        YamlToObjectTranslator = yamlToObjectTranslator;
         BuildJobConstructors = buildJobConstructors;
         LintingJobConstructor = lintingJobConstructor;
         TestingJobConstructors = testingJobConstructors;
@@ -81,6 +86,7 @@ public class MainViewModel : INotifyPropertyChanged
 
         ShowEditWindowCommand = new RelayCommand(ShowEditWindow, _ => true);
         SaveWorkflowCommand = new RelayCommand(SaveWorkflow, _ => true);
+        LoadWorkflowCommand = new RelayCommand(LoadWorkflow, _ => true);
         ShowEditWorkFlowConfigSettingsWindowCommand = new RelayCommand(ShowEditWorkFlowConfigSettingsWindow, _ => true);
         RemoveJobFromWorkspaceCommand = new RelayCommand(RemoveJobFromWorkspace, _ => true);
     }
@@ -210,6 +216,59 @@ public class MainViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(CurrentWorkflow));
 
             
+        }
+    }
+
+    private void LoadWorkflow(object? parameter)
+    {
+        OpenFileDialog dlg = new OpenFileDialog
+        {
+            Title = "Open workflow file",
+            Filter = "YAML files (*.yaml;*.yml)|*.yaml;*.yml|All files (*.*)|*.*",
+            DefaultExt = ".yaml",
+            InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+        };
+
+        bool? result = dlg.ShowDialog();
+        if (result != true || string.IsNullOrWhiteSpace(dlg.FileName))
+            return;
+
+        try
+        {
+            using FileStream stream = new FileStream(dlg.FileName, FileMode.Open, FileAccess.Read);
+            Workflow workflow = YamlToObjectTranslator.TranslateYamlToObject(stream);
+
+            if (workflow == null)
+            {
+                MessageBox.Show("Failed to load workflow: Invalid YAML format.", "Load error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+           
+            Nodes.Clear();
+
+            
+            CurrentWorkflow = workflow;
+
+            
+            if (workflow.Jobs != null)
+            {
+                foreach (var jobEntry in workflow.Jobs)
+                {
+                    Job job = jobEntry.Value;
+                    JobNodeViewModel nodeVm = new JobNodeViewModel(job);
+                    Nodes.Add(nodeVm);
+                }
+            }
+
+            
+            RecalculateLayout();
+
+            MessageBox.Show("Workflow loaded successfully.", "Load", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Failed to load workflow: {ex.Message}", "Load error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 

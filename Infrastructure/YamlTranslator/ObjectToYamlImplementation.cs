@@ -16,7 +16,7 @@ public class ObjectToYamlImplementation : IObjectToYamlTranslator
         {
             foreach (var step in job.Value.Steps!)
             {
-                Debug.WriteLine(step.Run);
+                
                 if (step.Run != null && step.Run is string )
                 {
                     runStrings = step.Run
@@ -24,7 +24,7 @@ public class ObjectToYamlImplementation : IObjectToYamlTranslator
                            .Select(l => l.Trim())
                            .ToArray();
                     step.Run = MutilineRunCmd(runStrings);
-                    Debug.WriteLine("Run Strings:" + step.Run);
+                   
                 }
             }
         }

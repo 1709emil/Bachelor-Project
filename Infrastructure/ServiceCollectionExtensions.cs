@@ -12,6 +12,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
         services.AddTransient<IObjectToYamlTranslator, ObjectToYamlImplementation>();
+        services.AddTransient<IYamlToObjectTranslator, YamlToObjectImplementation>();
         services.AddTransient<IWorkFlowConstructor, WorkFlowConstructorImplementation>();
         services.AddTransient<IBuildJobConstructor, MavenBuildJobImplementation>();
         services.AddTransient<IBuildJobConstructor, DotNetBuildJobImplementation>();
