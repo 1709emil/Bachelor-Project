@@ -56,7 +56,7 @@ public class MainViewModel : INotifyPropertyChanged
 
     private const double LeftMargin = 20.0;
     private const double TopMargin = 20.0;
-    private const double HorizontalSpacing = 180.0; 
+    private const double HorizontalSpacing = 250.0; 
     private const double VerticalSpacing = 40.0;
     private const double DefaultNodeWidth = 160.0;
     private const double DefaultNodeHeight = 100.0;
@@ -344,8 +344,8 @@ public class MainViewModel : INotifyPropertyChanged
         for (int i = 0; i < topLevel.Count; i++)
         {
             var n = topLevel[i];
-            n.CanvasLeft = LeftMargin + i * HorizontalSpacing;
-            n.CanvasTop = TopMargin;
+            n.CanvasLeft = LeftMargin;
+            n.CanvasTop = TopMargin + i * (DefaultNodeHeight + VerticalSpacing);
         }
 
         var handled = new HashSet<JobNodeViewModel>(topLevel);
@@ -360,8 +360,8 @@ public class MainViewModel : INotifyPropertyChanged
             {
                 var child = children[ci];
 
-                child.CanvasLeft = parent.CanvasLeft + ci * (DefaultNodeWidth + 8) * 0.0; 
-                child.CanvasTop = parent.CanvasTop + DefaultNodeHeight + VerticalSpacing + ci * (DefaultNodeHeight + 8);
+                child.CanvasLeft = parent.CanvasLeft + HorizontalSpacing;
+                child.CanvasTop = parent.CanvasTop + ci * (DefaultNodeHeight + VerticalSpacing);
                 if (!handled.Contains(child))
                 {
                     handled.Add(child);
@@ -373,8 +373,8 @@ public class MainViewModel : INotifyPropertyChanged
         var remaining = Nodes.Except(handled).ToList();
         for (int i = 0; i < remaining.Count; i++)
         {
-            remaining[i].CanvasLeft = LeftMargin + (topLevel.Count + i) * HorizontalSpacing;
-            remaining[i].CanvasTop = TopMargin;
+            remaining[i].CanvasLeft = LeftMargin;
+            remaining[i].CanvasTop = TopMargin + (topLevel.Count + i) * (DefaultNodeHeight + VerticalSpacing);
         }
     }
 
@@ -383,8 +383,8 @@ public class MainViewModel : INotifyPropertyChanged
         JobNodeViewModel node = new JobNodeViewModel(job);
         List<JobNodeViewModel> topNodes = Nodes.Where(n => string.IsNullOrWhiteSpace(n.Job.Needs)
                                         || !Nodes.Any(x => x.Job.Name == n.Job.Needs)).ToList();
-        node.CanvasLeft = LeftMargin + topNodes.Count * HorizontalSpacing;
-        node.CanvasTop = TopMargin;
+        node.CanvasLeft = LeftMargin;
+        node.CanvasTop = TopMargin + topNodes.Count * (DefaultNodeHeight + VerticalSpacing);
         Nodes.Add(node);
     }
 

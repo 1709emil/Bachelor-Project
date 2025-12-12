@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using VisualWorkflowBuilder.Application;
-using VisualWorkflowBuilder.Application.UseCases;
 using VisualWorkflowBuilder.Infrastructure;
 
 
@@ -30,8 +29,6 @@ public partial class App
 
         base.OnStartup(e);
 
-        ObjectToYamlService test =_host.Services.GetRequiredService<ObjectToYamlService>();
-        test.test();
     }
 
     protected override void OnExit(ExitEventArgs e)

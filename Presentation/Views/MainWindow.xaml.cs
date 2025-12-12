@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -125,43 +123,19 @@ public partial class MainWindow : Window
             var parentPos = parentElem.TransformToVisual(ConnectorCanvas).Transform(new Point(0, 0));
             var childPos  = childElem.TransformToVisual(ConnectorCanvas).Transform(new Point(0, 0));
 
-            double parentLeft = parentPos.X;
-            double parentTop = parentPos.Y;
-            double parentRight = parentLeft + parentElem.ActualWidth;
-            double parentBottom = parentTop + parentElem.ActualHeight;
-            double parentCenterY = parentTop + parentElem.ActualHeight / 2.0;
-            double parentCenterX = parentLeft + parentElem.ActualWidth / 2.0;
+            double parentRight = parentPos.X + parentElem.ActualWidth;
+            double parentCenterY = parentPos.Y + parentElem.ActualHeight / 2.0;
 
             double childLeft = childPos.X;
-            double childTop = childPos.Y;
-            double childRight = childLeft + childElem.ActualWidth;
-            double childBottom = childTop + childElem.ActualHeight;
-            double childCenterY = childTop + childElem.ActualHeight / 2.0;
-            double childCenterX = childLeft + childElem.ActualWidth / 2.0;
+            double childCenterY = childPos.Y + childElem.ActualHeight / 2.0;
 
 
-            Point startPoint, endPoint;
-            const double horizontalThreshold = 10.0;
-
-            if (childCenterX > parentCenterX + horizontalThreshold)
-            {
-                startPoint = new Point(parentRight, parentCenterY);
-                endPoint = new Point(childLeft, childCenterY);
-            }
-            else if (childCenterX < parentCenterX - horizontalThreshold)
-            {
-                startPoint = new Point(parentLeft, parentCenterY);
-                endPoint = new Point(childRight, childCenterY);
-            }
-            else
-            {
-
-                startPoint = new Point(parentCenterX, parentBottom);
-                endPoint = new Point(childCenterX, childTop);
-            }
+            Point startPoint = new Point(parentRight, parentCenterY);
+            Point endPoint = new Point(childLeft, childCenterY);
 
 
-            var midPoint = new Point(endPoint.X, startPoint.Y);
+            var midPoint = new Point((startPoint.X + endPoint.X) / 2.0, startPoint.Y);
+            var midPoint2 = new Point((startPoint.X + endPoint.X) / 2.0, endPoint.Y);
 
             var path = new Path
             {
@@ -171,7 +145,7 @@ public partial class MainWindow : Window
                 {
                     new PathFigure(startPoint, new PathSegment[]
                     {
-                        new PolyLineSegment(new[] { midPoint, endPoint }, true)
+                        new PolyLineSegment(new[] { midPoint, midPoint2, endPoint }, true)
                     }, false)
                 })
             };
@@ -179,7 +153,7 @@ public partial class MainWindow : Window
             ConnectorCanvas.Children.Add(path);
 
 
-            DrawArrowHead(endPoint, startPoint, ConnectorCanvas);
+            DrawArrowHead(endPoint, midPoint2, ConnectorCanvas);
         }
     }
 
