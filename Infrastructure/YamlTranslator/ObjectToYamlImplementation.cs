@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.IO;
 using VisualWorkflowBuilder.Application.Ports;
 using VisualWorkflowBuilder.Core.Entities;
@@ -35,7 +34,6 @@ public class ObjectToYamlImplementation : IObjectToYamlTranslator
             .Build();
         string Yaml = serializer.Serialize(workflow);
         File.WriteAllText(outputPath, Yaml);
-        Debug.WriteLine(Yaml);
     }
 
 
