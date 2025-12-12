@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using VisualWorkflowBuilder.UiImplementation.ViewModels;
@@ -11,11 +10,6 @@ namespace VisualWorkflowBuilder;
 
 public partial class MainWindow : Window
 {
-    private Point _dragStart;
-    private bool _isDragging;
-    private JobNodeViewModel? _draggingNode;
-    private FrameworkElement? _draggingElement;
-
     public MainWindow(MainViewModel vm)
     {
         InitializeComponent();
@@ -191,48 +185,5 @@ public partial class MainWindow : Window
             if (childItem != null) return childItem;
         }
         return null;
-    }
-
-
-    private void Node_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-        _draggingElement = sender as FrameworkElement;
-        if (_draggingElement == null) return;
-        _draggingNode = _draggingElement.DataContext as JobNodeViewModel;
-        if (_draggingNode == null) return;
-
-        _dragStart = e.GetPosition(ConnectorCanvas);
-        _isDragging = true;
-        _draggingElement.CaptureMouse();
-        e.Handled = true;
-    }
-
-    private void Node_MouseMove(object sender, MouseEventArgs e)
-    {
-        if (!_isDragging || _draggingNode == null) return;
-        var current = e.GetPosition(ConnectorCanvas);
-        var dx = current.X - _dragStart.X;
-        var dy = current.Y - _dragStart.Y;
-        _dragStart = current;
-
-        _draggingNode.CanvasLeft += dx;
-        _draggingNode.CanvasTop += dy;
-
-        RefreshConnectors();
-    }
-
-    private void Node_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-    {
-        if (!_isDragging) return;
-        _isDragging = false;
-        if (_draggingElement != null)
-        {
-            _draggingElement.ReleaseMouseCapture();
-        }
-        _draggingNode = null;
-        _draggingElement = null;
-
-
-        RefreshConnectors();
     }
 }
