@@ -20,6 +20,7 @@ public class MainViewModel : INotifyPropertyChanged
     private IEnumerable<IBuildJobConstructor> BuildJobConstructors;
     private ILintingJobConstructor LintingJobConstructor;
     private IEnumerable<ITestingJobConstructor> TestingJobConstructors;
+    private IDelpoyJobConstructor DelpoyJobConstructor;
 
     private Workflow _currentWorkflow = new();
     public Workflow CurrentWorkflow
@@ -41,6 +42,7 @@ public class MainViewModel : INotifyPropertyChanged
     public ICommand AddLintingJobToWorkspaceCommand { get; }
     public ICommand AddTestingJobDotNetToWorkspaceCommand { get; }
     public ICommand AddTestingJobJUnitToWorkspaceCommand { get; }
+    public ICommand AddDeployJobToWorkspaceCommand { get; }
 
 
 
@@ -57,13 +59,16 @@ public class MainViewModel : INotifyPropertyChanged
     private const double DefaultNodeWidth = 160.0;
     private const double DefaultNodeHeight = 100.0;
 
-    public MainViewModel(IWorkFlowConstructor workFlowConstructor, IObjectToYamlTranslator objectToYamlTranslator, IEnumerable<IBuildJobConstructor> buildJobConstructors,ILintingJobConstructor lintingJobConstructor, IEnumerable<ITestingJobConstructor> testingJobConstructors)
+    public MainViewModel(IWorkFlowConstructor workFlowConstructor, IObjectToYamlTranslator objectToYamlTranslator, 
+        IEnumerable<IBuildJobConstructor> buildJobConstructors,ILintingJobConstructor lintingJobConstructor, 
+        IEnumerable<ITestingJobConstructor> testingJobConstructors, IDelpoyJobConstructor delpoyJobConstructor)
     {
         WorkFlowConstructor = workFlowConstructor;
         Translator = objectToYamlTranslator;
         BuildJobConstructors = buildJobConstructors;
         LintingJobConstructor = lintingJobConstructor;
         TestingJobConstructors = testingJobConstructors;
+        DelpoyJobConstructor = delpoyJobConstructor;
 
         AddJobToWorkspaceCommand = new RelayCommand(AddJobToWorkspace, _ => true);
         AddBuildJobMavenToWorkspaceCommand = new RelayCommand(AddBuildJobMavenToWorkspace, _ => true);
@@ -71,6 +76,7 @@ public class MainViewModel : INotifyPropertyChanged
         AddLintingJobToWorkspaceCommand = new RelayCommand(AddLintingJobToWorkspace, _ => true);
         AddTestingJobDotNetToWorkspaceCommand = new RelayCommand(AddTestingJobDotNetToWorkspace, _ => true);
         AddTestingJobJUnitToWorkspaceCommand = new RelayCommand(AddTestingJobJUnitToWorkspace, _ => true);
+        AddDeployJobToWorkspaceCommand = new RelayCommand(AddDeployJobToWorkspace, _ => true);
 
 
         ShowEditWindowCommand = new RelayCommand(ShowEditWindow, _ => true);
@@ -139,6 +145,12 @@ public class MainViewModel : INotifyPropertyChanged
             return;
         
         Job job =  junitConstructor.ConstructTestingJobWithName($"Testing With JUnit Job {Nodes.Count + 1}");
+        EditNewNodePositions(job);
+        RecalculateLayout();
+    }
+    private void AddDeployJobToWorkspace(object? parameter)
+    {
+        Job job = DelpoyJobConstructor.ConstructDeployJobWithName($"Deploy Job {Nodes.Count + 1}");
         EditNewNodePositions(job);
         RecalculateLayout();
     }

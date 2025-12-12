@@ -18,6 +18,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<ILintingJobConstructor, LintingJobImplementation>();
         services.AddTransient<ITestingJobConstructor, DotNetTestingJobImplementation>();
         services.AddTransient<ITestingJobConstructor, JUnitTestingJobImplementation>();
+        services.AddTransient<IDelpoyJobConstructor, DeployJobImplementation>();
         return services;
     }
 }
