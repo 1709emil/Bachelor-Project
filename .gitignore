@@ -5,3 +5,7 @@ riderModule.iml
 /_ReSharper.Caches/
 .idea
 .vs
+*.user
+*.pubxml
+*.pubxml.user
+Properties/PublishProfiles/
