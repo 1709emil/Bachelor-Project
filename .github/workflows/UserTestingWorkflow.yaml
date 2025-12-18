@@ -3,6 +3,7 @@ on:
   push:
     branches:
     - master
+    - yamlOutPutTesting
 jobs:
   Build:
     name: Build
