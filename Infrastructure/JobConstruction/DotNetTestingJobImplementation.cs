@@ -10,7 +10,7 @@ namespace VisualWorkflowBuilder.Infrastructure.JobConstruction
             Job job = new Job
             {
                 Name = "Testing Job",
-                RunsOn = "ubuntu-latest",
+                RunsOn = "windows-latest",
                 Steps = new List<Step>
                 {
                     new Step
@@ -20,7 +20,7 @@ namespace VisualWorkflowBuilder.Infrastructure.JobConstruction
                     },
                     new Step
                     {
-                        Name = "Set up .NET",
+                        Name = "Set up DotNet",
                         Uses = "actions/setup-dotnet@v1",
                         With = new Dictionary<string, string>
                         {
@@ -58,7 +58,7 @@ namespace VisualWorkflowBuilder.Infrastructure.JobConstruction
             Job job = new Job
             {
                 Name = Name,
-                RunsOn = "ubuntu-latest",
+                RunsOn = "windows-latest",
                 Steps = new List<Step>
                 {
                     new Step
@@ -68,7 +68,7 @@ namespace VisualWorkflowBuilder.Infrastructure.JobConstruction
                     },
                     new Step
                     {
-                        Name = "Set up .NET",
+                        Name = "Set up DotNet",
                         Uses = "actions/setup-dotnet@v1",
                         With = new Dictionary<string, string>
                         {
