@@ -17,7 +17,6 @@ public partial class App
         _host = Host.CreateDefaultBuilder()
             .ConfigureServices(services =>
             {
-                services.AddApplication();
                 services.AddInfrastructure();
                 services.AddPresentation();
             })
