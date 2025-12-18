@@ -13,9 +13,25 @@ public class ObjectToYamlImplementation : IObjectToYamlTranslator
         string[] runStrings;
         foreach (var job in workflow.Jobs!)
         {
+           
+            if (job.Value.Env != null && job.Value.Env.Count == 0)
+            {
+                job.Value.Env = null;
+            }
+
             foreach (var step in job.Value.Steps!)
             {
-                
+               
+                if (step.With != null && step.With.Count == 0)
+                {
+                    step.With = null;
+                }
+
+                if (step.Env != null && step.Env.Count == 0)
+                {
+                    step.Env = null;
+                }
+
                 if (step.Run != null && step.Run is string )
                 {
                     runStrings = step.Run
