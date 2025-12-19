@@ -36,12 +36,8 @@ namespace VisualWorkflowBuilder.Infrastructure.JobConstruction
                     {
                         Name = "Run linter",
                         Run = "dotnet build --no-restore --configuration Release /p:EnforceCodeStyleInBuild=true /p:TreatWarningsAsErrors=false"
-                    },
-                    new Step
-                    {
-                        Name = "Run format check",
-                        Run = "dotnet format --verify-no-changes --verbosity diagnostic"
                     }
+                   
                 }
             };
 
@@ -90,12 +86,8 @@ namespace VisualWorkflowBuilder.Infrastructure.JobConstruction
                     {
                         Name = "Run linter",
                         Run = "dotnet build --no-restore --configuration Release /p:EnforceCodeStyleInBuild=true /p:TreatWarningsAsErrors=false"
-                    },
-                    new Step
-                    {
-                        Name = "Run format check",
-                        Run = "dotnet format --verify-no-changes --verbosity diagnostic"
                     }
+                
                 }
             };
             return job;
