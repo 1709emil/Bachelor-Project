@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using VisualWorkflowBuilder.Core.Entities;
 
-namespace VisualWorkflowBuilder.UiImplementation.ViewModels;
+namespace VisualWorkflowBuilder.Presentation.ViewModels;
 
 public sealed class JobNodeViewModel : INotifyPropertyChanged
 {
