@@ -15,6 +15,6 @@ jobs:
       with:
         dotnet-version: 9.0.x
     - name: Restore dependencies
-      run: cd Test && dotnet build --configuration Release --no-restore
+      run: cd Test && dotnet restore
     - name: Run tests
       run: cd Test && dotnet test --no-build --configuration Release --verbosity normal
