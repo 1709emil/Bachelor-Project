@@ -7,7 +7,7 @@ using VisualWorkflowBuilder.UiImplementation.Commands;
 
 namespace VisualWorkflowBuilder.Presentation.ViewModels;
 
-internal class EditJobViewModel
+public class EditJobViewModel
 {
     public Job Job { get; }
 
@@ -104,7 +104,7 @@ internal class EditJobViewModel
         editStepWindow.ShowDialog();
     }
 
-    internal class EnvEntry
+    public class EnvEntry
     {
         public string? Key { get; set; }
         public string? Value { get; set; }
