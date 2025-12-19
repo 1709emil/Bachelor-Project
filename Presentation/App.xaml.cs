@@ -7,9 +7,9 @@ using VisualWorkflowBuilder.Infrastructure;
 
 namespace VisualWorkflowBuilder;
 
-public partial class App 
+public partial class App
 {
-    
+
     private IHost _host = null!;
 
     protected override void OnStartup(StartupEventArgs e)

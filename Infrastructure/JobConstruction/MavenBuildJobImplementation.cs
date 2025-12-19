@@ -7,7 +7,7 @@ namespace VisualWorkflowBuilder.Infrastructure.JobConstruction
     {
         public Job ConstructBuildJobNoParameters()
         {
-           Job Job = new Job
+            Job Job = new Job
             {
                 Name = "Maven Build Job",
                 RunsOn = "ubuntu-latest",
@@ -39,7 +39,7 @@ namespace VisualWorkflowBuilder.Infrastructure.JobConstruction
 
         public Job ConstructBuildJobWithFullParameters(string name, string runsOn, Step steps)
         {
-           Job Job = new Job
+            Job Job = new Job
             {
                 Name = name,
                 RunsOn = runsOn,

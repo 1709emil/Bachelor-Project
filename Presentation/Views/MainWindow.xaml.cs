@@ -115,7 +115,7 @@ public partial class MainWindow : Window
 
 
             var parentPos = parentElem.TransformToVisual(ConnectorCanvas).Transform(new Point(0, 0));
-            var childPos  = childElem.TransformToVisual(ConnectorCanvas).Transform(new Point(0, 0));
+            var childPos = childElem.TransformToVisual(ConnectorCanvas).Transform(new Point(0, 0));
 
             double parentRight = parentPos.X + parentElem.ActualWidth;
             double parentCenterY = parentPos.Y + parentElem.ActualHeight / 2.0;

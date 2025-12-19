@@ -6,7 +6,7 @@ using VisualWorkflowBuilder.Presentation.Views;
 using VisualWorkflowBuilder.UiImplementation.Commands;
 
 namespace VisualWorkflowBuilder.Presentation.ViewModels;
- 
+
 internal class EditJobViewModel
 {
     public Job Job { get; }
@@ -43,15 +43,15 @@ internal class EditJobViewModel
 
     private void Save(object parameter)
     {
-        
+
         Job.Env = Env
             .Where(e => !string.IsNullOrWhiteSpace(e.Key))
             .ToDictionary(e => e.Key!, e => e.Value ?? string.Empty);
 
-        
+
         Job.Steps = Steps.ToList();
 
-        
+
         if (parameter is Window w)
         {
             w.DialogResult = true;

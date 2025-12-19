@@ -56,14 +56,14 @@ public class MainViewModel : INotifyPropertyChanged
 
     private const double LeftMargin = 20.0;
     private const double TopMargin = 20.0;
-    private const double HorizontalSpacing = 250.0; 
+    private const double HorizontalSpacing = 250.0;
     private const double VerticalSpacing = 40.0;
     private const double DefaultNodeWidth = 160.0;
     private const double DefaultNodeHeight = 100.0;
 
-    public MainViewModel(IWorkFlowConstructor workFlowConstructor, IObjectToYamlTranslator objectToYamlTranslator, 
+    public MainViewModel(IWorkFlowConstructor workFlowConstructor, IObjectToYamlTranslator objectToYamlTranslator,
         IYamlToObjectTranslator yamlToObjectTranslator,
-        IEnumerable<IBuildJobConstructor> buildJobConstructors,ILintingJobConstructor lintingJobConstructor, 
+        IEnumerable<IBuildJobConstructor> buildJobConstructors, ILintingJobConstructor lintingJobConstructor,
         IEnumerable<ITestingJobConstructor> testingJobConstructors, IDelpoyJobConstructor delpoyJobConstructor)
     {
         WorkFlowConstructor = workFlowConstructor;
@@ -93,7 +93,7 @@ public class MainViewModel : INotifyPropertyChanged
     private void AddJobToWorkspace(object? parameter)
     {
         Job job = new Job() { Name = $"Job {Nodes.Count + 1}" };
-        
+
         EditNewNodePositions(job);
 
         RecalculateLayout();
@@ -105,8 +105,8 @@ public class MainViewModel : INotifyPropertyChanged
                                                 .FirstOrDefault(c => c.GetType().Name.Contains("Maven", StringComparison.OrdinalIgnoreCase));
         if (mavenConstructor == null)
             return;
-        
-        Job job =  mavenConstructor.ConstructBuildJobWithName($"Build With Maven {Nodes.Count + 1}");
+
+        Job job = mavenConstructor.ConstructBuildJobWithName($"Build With Maven {Nodes.Count + 1}");
 
         EditNewNodePositions(job);
         RecalculateLayout();
@@ -118,8 +118,8 @@ public class MainViewModel : INotifyPropertyChanged
                                                 .FirstOrDefault(c => c.GetType().Name.Contains("DotNet", StringComparison.OrdinalIgnoreCase));
         if (dotNetConstructor == null)
             return;
-        
-        Job job =  dotNetConstructor.ConstructBuildJobWithName($"Build With .NET {Nodes.Count + 1}");
+
+        Job job = dotNetConstructor.ConstructBuildJobWithName($"Build With .NET {Nodes.Count + 1}");
         EditNewNodePositions(job);
         RecalculateLayout();
     }
@@ -136,8 +136,8 @@ public class MainViewModel : INotifyPropertyChanged
                                                 .FirstOrDefault(c => c.GetType().Name.Contains("DotNet", StringComparison.OrdinalIgnoreCase));
         if (testingConstructor == null)
             return;
-        
-        Job job =  testingConstructor.ConstructTestingJobWithName($"Testing With .NET Job {Nodes.Count + 1}");
+
+        Job job = testingConstructor.ConstructTestingJobWithName($"Testing With .NET Job {Nodes.Count + 1}");
         EditNewNodePositions(job);
         RecalculateLayout();
     }
@@ -148,8 +148,8 @@ public class MainViewModel : INotifyPropertyChanged
                                                 .FirstOrDefault(c => c.GetType().Name.Contains("JUnit", StringComparison.OrdinalIgnoreCase));
         if (junitConstructor == null)
             return;
-        
-        Job job =  junitConstructor.ConstructTestingJobWithName($"Testing With JUnit Job {Nodes.Count + 1}");
+
+        Job job = junitConstructor.ConstructTestingJobWithName($"Testing With JUnit Job {Nodes.Count + 1}");
         EditNewNodePositions(job);
         RecalculateLayout();
     }
@@ -207,14 +207,14 @@ public class MainViewModel : INotifyPropertyChanged
             DataContext = new EditWorkFlowConfigSettingsViewModel(CurrentWorkflow)
         };
 
-       
+
         bool? result = editWindow.ShowDialog();
         if (result == true)
         {
-         
+
             OnPropertyChanged(nameof(CurrentWorkflow));
 
-            
+
         }
     }
 
@@ -243,13 +243,13 @@ public class MainViewModel : INotifyPropertyChanged
                 return;
             }
 
-           
+
             Nodes.Clear();
 
-            
+
             CurrentWorkflow = workflow;
 
-            
+
             if (workflow.Jobs != null)
             {
                 foreach (var jobEntry in workflow.Jobs)
@@ -260,7 +260,7 @@ public class MainViewModel : INotifyPropertyChanged
                 }
             }
 
-            
+
             RecalculateLayout();
 
             MessageBox.Show("Workflow loaded successfully.", "Load", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -273,7 +273,7 @@ public class MainViewModel : INotifyPropertyChanged
 
     private void SaveWorkflow(object? parameter)
     {
-       
+
         if (!IsWorkflowConfigValid())
         {
             MessageBoxResult validationResult = MessageBox.Show(
@@ -289,7 +289,7 @@ public class MainViewModel : INotifyPropertyChanged
             return;
         }
 
-        Workflow workflow = WorkFlowConstructor.ConstructWorkFlowWithParameters(CurrentWorkflow.Name, CurrentWorkflow.On, 
+        Workflow workflow = WorkFlowConstructor.ConstructWorkFlowWithParameters(CurrentWorkflow.Name, CurrentWorkflow.On,
             Nodes.ToDictionary(n => n.Job.Name, n => n.Job));
 
         SaveFileDialog dlg = new SaveFileDialog
@@ -318,13 +318,13 @@ public class MainViewModel : INotifyPropertyChanged
 
     private bool IsWorkflowConfigValid()
     {
-        
+
         if (string.IsNullOrWhiteSpace(CurrentWorkflow.Name))
         {
             return false;
         }
 
-        
+
         if (CurrentWorkflow.On == null)
         {
             return false;
