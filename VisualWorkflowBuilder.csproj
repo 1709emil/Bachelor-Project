@@ -4,6 +4,7 @@
         <OutputType>WinExe</OutputType>
         <TargetFramework>net9.0-windows</TargetFramework>
         <UseWPF>true</UseWPF>
+		<RollForward>LatestMajor</RollForward>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <DefaultItemExcludes>$(DefaultItemExcludes);Test\**</DefaultItemExcludes>
