@@ -20,7 +20,7 @@ namespace VisualWorkflowBuilder.Infrastructure.YamlTranslator
 
             Workflow workflow = deserializer.Deserialize<Workflow>(yamlContent);
 
-            
+
             if (workflow?.Jobs != null)
             {
                 foreach (var job in workflow.Jobs)
@@ -29,7 +29,7 @@ namespace VisualWorkflowBuilder.Infrastructure.YamlTranslator
                     {
                         foreach (var step in job.Value.Steps)
                         {
-                            
+
                             if (step.Run != null && step.Run is string runString)
                             {
                                 step.Run = runString.Trim();

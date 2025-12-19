@@ -21,7 +21,7 @@ namespace VisualWorkflowBuilder.Infrastructure.JobConstruction
                     new Step
                     {
                         Name = "Deploy to Production",
-                        Run = "echo Deploying to production server...\n bash deploy.sh" 
+                        Run = "echo Deploying to production server...\n bash deploy.sh"
                     }
                 }
             };
@@ -55,7 +55,7 @@ namespace VisualWorkflowBuilder.Infrastructure.JobConstruction
                     new Step
                     {
                         Name = "Deploy to Production",
-                        Run = "echo Deploying to production server...\n bash deploy.sh" 
+                        Run = "echo Deploying to production server...\n bash deploy.sh"
                     }
                 }
             };

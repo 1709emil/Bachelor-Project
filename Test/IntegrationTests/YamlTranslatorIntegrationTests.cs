@@ -85,7 +85,7 @@ jobs:
             // Arrange
             IObjectToYamlTranslator toYaml = new ObjectToYamlImplementation();
             IYamlToObjectTranslator fromYaml = new YamlToObjectImplementation();
-            
+
             string tempFile = Path.GetTempFileName();
             _tempFiles.Add(tempFile);
 
@@ -116,7 +116,7 @@ jobs:
 
             // Act
             toYaml.TranslateObjectToYaml(original, tempFile);
-            
+
             Workflow restored;
             using (FileStream stream = new FileStream(tempFile, FileMode.Open, FileAccess.Read))
             {

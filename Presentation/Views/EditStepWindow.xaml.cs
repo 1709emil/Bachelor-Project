@@ -12,13 +12,13 @@ namespace VisualWorkflowBuilder.Presentation.Views
 
         private void OnLoaded(object? sender, RoutedEventArgs e)
         {
-            
+
             WindowStyle = WindowStyle.None;
             ResizeMode = ResizeMode.NoResize;
             WindowState = WindowState.Maximized;
             Topmost = true;
 
-          
+
         }
     }
 }

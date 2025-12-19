@@ -64,7 +64,7 @@ namespace VisualWorkflowBuilder.Infrastructure.JobConstruction
             Job job = new Job
             {
                 Name = Name,
-                RunsOn = "ubuntu-latest",
+                RunsOn = "windows-latest",
                 Steps = new List<Step>
                 {
                     new Step

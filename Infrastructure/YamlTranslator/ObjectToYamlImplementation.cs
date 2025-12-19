@@ -13,7 +13,7 @@ public class ObjectToYamlImplementation : IObjectToYamlTranslator
         string[] runStrings;
         foreach (var job in workflow.Jobs!)
         {
-           
+
             if (job.Value.Env != null && job.Value.Env.Count == 0)
             {
                 job.Value.Env = null;
@@ -21,7 +21,7 @@ public class ObjectToYamlImplementation : IObjectToYamlTranslator
 
             foreach (var step in job.Value.Steps!)
             {
-               
+
                 if (step.With != null && step.With.Count == 0)
                 {
                     step.With = null;
@@ -32,14 +32,14 @@ public class ObjectToYamlImplementation : IObjectToYamlTranslator
                     step.Env = null;
                 }
 
-                if (step.Run != null && step.Run is string )
+                if (step.Run != null && step.Run is string)
                 {
                     runStrings = step.Run
                            .Split(new[] { "\r\n", "\n" }, System.StringSplitOptions.RemoveEmptyEntries)
                            .Select(l => l.Trim())
                            .ToArray();
                     step.Run = MutilineRunCmd(runStrings);
-                   
+
                 }
             }
         }

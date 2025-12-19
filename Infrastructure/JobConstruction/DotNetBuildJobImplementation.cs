@@ -38,7 +38,7 @@ namespace VisualWorkflowBuilder.Infrastructure.JobConstruction
                         Run = "dotnet build --no-restore --configuration Release"
                     }
                 }
-               
+
             };
             return Job;
         }

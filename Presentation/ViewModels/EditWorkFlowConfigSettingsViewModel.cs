@@ -99,7 +99,7 @@ namespace VisualWorkflowBuilder.Presentation.ViewModels
                 PullRequestBranches.Remove(entry);
         }
 
-        
+
         public class BranchEntry : INotifyPropertyChanged
         {
             private string? _value;
