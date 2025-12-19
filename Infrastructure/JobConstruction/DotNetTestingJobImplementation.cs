@@ -35,7 +35,7 @@ namespace VisualWorkflowBuilder.Infrastructure.JobConstruction
                     new Step
                     {
                         Name = "Run tests",
-                        Run = "dotnet test --no-build --verbosity normal"
+                        Run = "dotnet test"
                     }
                 }
             };
@@ -83,7 +83,7 @@ namespace VisualWorkflowBuilder.Infrastructure.JobConstruction
                     new Step
                     {
                         Name = "Run tests",
-                        Run = "dotnet test --no-build --verbosity normal"
+                        Run = "dotnet test"
                     }
                 }
             };
