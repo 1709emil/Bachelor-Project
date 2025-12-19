@@ -17,4 +17,4 @@ jobs:
     - name: Restore dependencies
       run: cd Test && dotnet restore
     - name: Run test
-      run: cd Test && dotnet test
+      run: cd Test/IntegrationTests/ && dotnet test
