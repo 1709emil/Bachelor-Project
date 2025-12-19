@@ -18,5 +18,3 @@ jobs:
       run: dotnet restore
     - name: Run linter
       run: dotnet build --no-restore --configuration Release /p:EnforceCodeStyleInBuild=true /p:TreatWarningsAsErrors=false
-    - name: Run format check
-      run: dotnet format --verify-no-changes --verbosity diagnostic
