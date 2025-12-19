@@ -6,7 +6,7 @@ using VisualWorkflowBuilder.UiImplementation.Commands;
 
 namespace VisualWorkflowBuilder.Presentation.ViewModels
 {
-    internal class EditStepViewModel
+    public class EditStepViewModel
     {
 
         public Step Step { get; }
@@ -85,7 +85,7 @@ namespace VisualWorkflowBuilder.Presentation.ViewModels
                 Env.Remove(entry);
         }
 
-        internal class KeyValueEntry
+        public class KeyValueEntry
         {
             public string? Key { get; set; }
             public string? Value { get; set; }
