@@ -9,7 +9,7 @@ namespace VisualWorkflowBuilder.Infrastructure.JobConstruction
         {
             Job job = new Job
             {
-                Name = "Linting Job",
+                Name = "Linting-Job",
                 RunsOn = "ubuntu-latest",
                 Steps = new List<Step>
                 {
@@ -20,22 +20,27 @@ namespace VisualWorkflowBuilder.Infrastructure.JobConstruction
                     },
                     new Step
                     {
-                        Name = "Set up Node.js",
-                        Uses = "actions/setup-node@v2",
+                        Name = "Set up DotNet",
+                        Uses = "actions/setup-dotnet@v4",
                         With = new Dictionary<string, string>
                         {
-                            { "node-version", "14" }
+                            { "dotnet-version", "9.0.x" }
                         }
                     },
                     new Step
                     {
-                        Name = "Install dependencies",
-                        Run = "npm install"
+                        Name = "Restore dependencies",
+                        Run = "dotnet restore"
                     },
                     new Step
                     {
                         Name = "Run linter",
-                        Run = "npm run lint"
+                        Run = "dotnet build --no-restore --configuration Release /p:EnforceCodeStyleInBuild=true /p:TreatWarningsAsErrors=false"
+                    },
+                    new Step
+                    {
+                        Name = "Run format check",
+                        Run = "dotnet format --verify-no-changes --verbosity diagnostic"
                     }
                 }
             };
@@ -69,22 +74,27 @@ namespace VisualWorkflowBuilder.Infrastructure.JobConstruction
                     },
                     new Step
                     {
-                        Name = "Set up Node.js",
-                        Uses = "actions/setup-node@v2",
+                        Name = "Set up DotNet",
+                        Uses = "actions/setup-dotnet@v4",
                         With = new Dictionary<string, string>
                         {
-                            { "node-version", "14" }
+                            { "dotnet-version", "9.0.x" }
                         }
                     },
                     new Step
                     {
-                        Name = "Install dependencies",
-                        Run = "npm install"
+                        Name = "Restore dependencies",
+                        Run = "dotnet restore"
                     },
                     new Step
                     {
                         Name = "Run linter",
-                        Run = "npm run lint"
+                        Run = "dotnet build --no-restore --configuration Release /p:EnforceCodeStyleInBuild=true /p:TreatWarningsAsErrors=false"
+                    },
+                    new Step
+                    {
+                        Name = "Run format check",
+                        Run = "dotnet format --verify-no-changes --verbosity diagnostic"
                     }
                 }
             };
