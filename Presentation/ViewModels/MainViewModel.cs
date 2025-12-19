@@ -92,7 +92,7 @@ public class MainViewModel : INotifyPropertyChanged
 
     private void AddJobToWorkspace(object? parameter)
     {
-        Job job = new Job() { Name = $"Job {Nodes.Count + 1}" };
+        Job job = new Job() { Name = $"Job-{Nodes.Count + 1}" };
 
         EditNewNodePositions(job);
 
@@ -106,7 +106,7 @@ public class MainViewModel : INotifyPropertyChanged
         if (mavenConstructor == null)
             return;
 
-        Job job = mavenConstructor.ConstructBuildJobWithName($"Build With Maven {Nodes.Count + 1}");
+        Job job = mavenConstructor.ConstructBuildJobWithName($"Build-With-Maven-{Nodes.Count + 1}");
 
         EditNewNodePositions(job);
         RecalculateLayout();
@@ -119,14 +119,14 @@ public class MainViewModel : INotifyPropertyChanged
         if (dotNetConstructor == null)
             return;
 
-        Job job = dotNetConstructor.ConstructBuildJobWithName($"Build With .NET {Nodes.Count + 1}");
+        Job job = dotNetConstructor.ConstructBuildJobWithName($"Build-With-DotNet{Nodes.Count + 1}");
         EditNewNodePositions(job);
         RecalculateLayout();
     }
 
     private void AddLintingJobToWorkspace(object? parameter)
     {
-        Job job = LintingJobConstructor.ConstructLintingJobWithName($"Linting Job {Nodes.Count + 1}");
+        Job job = LintingJobConstructor.ConstructLintingJobWithName($"Linting-Job-{Nodes.Count + 1}");
         EditNewNodePositions(job);
         RecalculateLayout();
     }
@@ -137,7 +137,7 @@ public class MainViewModel : INotifyPropertyChanged
         if (testingConstructor == null)
             return;
 
-        Job job = testingConstructor.ConstructTestingJobWithName($"Testing With .NET Job {Nodes.Count + 1}");
+        Job job = testingConstructor.ConstructTestingJobWithName($"Testing-With-DotNet-{Nodes.Count + 1}");
         EditNewNodePositions(job);
         RecalculateLayout();
     }
@@ -149,13 +149,13 @@ public class MainViewModel : INotifyPropertyChanged
         if (junitConstructor == null)
             return;
 
-        Job job = junitConstructor.ConstructTestingJobWithName($"Testing With JUnit Job {Nodes.Count + 1}");
+        Job job = junitConstructor.ConstructTestingJobWithName($"Testing-With-JUnit-{Nodes.Count + 1}");
         EditNewNodePositions(job);
         RecalculateLayout();
     }
     private void AddDeployJobToWorkspace(object? parameter)
     {
-        Job job = DelpoyJobConstructor.ConstructDeployJobWithName($"Deploy Job {Nodes.Count + 1}");
+        Job job = DelpoyJobConstructor.ConstructDeployJobWithName($"Deploy-Job-{Nodes.Count + 1}");
         EditNewNodePositions(job);
         RecalculateLayout();
     }
