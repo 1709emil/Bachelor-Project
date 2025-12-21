@@ -1,0 +1,50 @@
+name: workflow-User-test-3
+on:
+  push:
+    branches:
+    - User-test-3
+jobs:
+  Build-With-DotNet1:
+    name: Build-With-DotNet1
+    runs-on: windows-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Set up DotNet
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 9.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore --configuration Release
+  Testing-With-DotNet-2:
+    name: Testing-With-DotNet-2
+    runs-on: windows-latest
+    needs: Build-With-DotNet1
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Set up DotNet
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 9.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Run tests
+      run: dotnet test
+  Linting-Job-3:
+    name: Linting-Job-3
+    runs-on: windows-latest
+    needs: Testing-With-DotNet-2
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Set up DotNet
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Run linter
+      run: dotnet build --no-restore --configuration Release /p:EnforceCodeStyleInBuild=true /p:TreatWarningsAsErrors=false
