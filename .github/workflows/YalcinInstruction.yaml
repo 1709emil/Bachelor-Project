@@ -1,0 +1,53 @@
+name: YalcinInstruction
+on:
+  push:
+    branches:
+    - User-test-2
+  pull_request:
+    branches:
+    - User-test-2
+jobs:
+  Build-With-DotNet1:
+    name: Build-With-DotNet1
+    runs-on: windows-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Set up DotNet
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 9.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore --configuration Release
+  Linting-Job-2:
+    name: Linting-Job-2
+    runs-on: windows-latest
+    needs: Testing-With-DotNet-3
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Set up DotNet
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Run linter
+      run: dotnet build --no-restore --configuration Release /p:EnforceCodeStyleInBuild=true /p:TreatWarningsAsErrors=false
+  Testing-With-DotNet-3:
+    name: Testing-With-DotNet-3
+    runs-on: windows-latest
+    needs: Build-With-DotNet1
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Set up DotNet
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 9.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Run tests
+      run: dotnet test
