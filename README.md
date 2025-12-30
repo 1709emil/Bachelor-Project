@@ -1,6 +1,6 @@
 # Bachelor Project
 
-## 📌 Demo
+##  Demo
 
-🎥 **Watch the demo video:**  
-👉 [YouTube Demo Link](https://www.youtube.com/watch?v=1f5a9kL62KI)  
+ **Watch the demo video:**  
+ [YouTube Demo Link](https://www.youtube.com/watch?v=1f5a9kL62KI)  
